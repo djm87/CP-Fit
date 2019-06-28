@@ -1,0 +1,43 @@
+Sections,Parameters,lowerBound,upperBound,fitFlag,scaling,description
+General,1.78,1.6,1.9,0,1E-05,grain size case 1 
+,2.22,2.1,2.3,0,1E-05,grain size case 2 
+,2.61,2.5,2.7,0,1E-05,grain size case 3 
+,5,0.4,0.6,0,0.1,barrier factor 
+,4.4,4.3,4.4,0,10000,shear modulus 
+Prismatic,5.02542316018354,0.7,6,1,10,Tua0
+,6.38959807241108,0,7,1,0.01,Hall Petch for grain and twins
+,2.05318238748603,1.30581263211704,5.22325052846816,0,10000000,k1 DD
+,1,1.8910063545259,7.56402541810358,0,0.01,g DD
+,1.202,0.2,1.5,0,1000,drag DD
+,2.678386476681,0.4,4,0,1000,latent hardening on tensile twin
+,1.047,0.4,4,0,1000,latent hardening on compression twin
+,5.55,3,8,0,10000000000,rho DD
+,1,0.9,1.1,0,10000000,EDOT_0 DD
+Basal,4.80428290640184,9,15,1,10,Tua0
+,3,0,7,1,0.1,Hall Petch for grain and twins
+,3.676757236223,2.08022077835224,8.32088311340898,0,10000000,k1 DD
+,3.5,1.44006854469088,5.76027417876354,0,0.01,g DD
+,6.681,1,13,0,100,drag DD
+,3.07453510074269,0.4,4,0,1000,latent hardening on tensile twin
+,2.199,0.4,4,0,1000,latent hardening on compression twin
+,5.55,3,8,0,10000000000,rho DD
+,1,0.9,1.1,0,10000000,EDOT_0 DD
+Pyr I <c+a>,9.43939799644312,9,14,1,10,Tua0
+,5.70898180561865,0,7,1,0.1,Hall Petch for grain and twins
+,2.6,3.43757661165604,13.7503064466241,0,10000000,k1 DD
+,9,2.27895002216345,9.11580008865379,0,0.01,g DD
+,5.464,1,13,0,100,drag DD
+,8.09265278550737,0.4,13,0,1000,latent hardening on tensile twin
+,1.745,0.5,2.5,0,10000,latent hardening on compression twin
+,5.55,3,8,0,10000000000,rho DD
+,1,0.9,1.1,0,10000000,EDOT_0 DD 
+Twin TT1,0.190208045900807,70,130,1,100,Tua0
+,3.05514213141108,0,7,1,0.1,Hall Petch for twin
+,1,0.9,1.1,0,0.1,Inverse of number of laminla in HP for twin
+,4.458,1.9,5,0,0.1,Thres1 sets the saturation value of twinning
+,1,0.9,1.1,0,1,Twin fraction before secondary twinning starts
+Twin CT1,0.837176868698258,70,130,1,100,Tua0
+,6.33240029563821,0,7,1,0.1,Hall Petch for twin
+,1,0.9,1.1,0,0.1,Inverse of number of laminla in HP for twin
+,2,1.9,5,0,0.1,Thres1 sets the saturation value of twinning
+,1,0.9,1.1,0,1,Twin fraction before secondary twinning starts 

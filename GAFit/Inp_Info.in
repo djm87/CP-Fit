@@ -1,0 +1,26 @@
+**System Information
+*System type, 1 - linux, 2 - windows
+1
+*Program executable name
+a.out
+*-------------------------------
+**Fitting Data
+*Path of parameter table
+ModelRunFiles/Fitting_inputs10_custom.csv
+*Number of table headers
+5
+*Table headers, capitalization matters
+Parameters
+lowerBound
+upperBound
+fitFlag
+scaling
+*Recipe header
+fitFlag
+*-------------------------------
+**Fitting Strategy
+*Fitting range
+0.03
+0.3
+*Shifting, 0 - no shifting, non-zero - specifies the amount of shifting
+0
