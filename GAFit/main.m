@@ -1,14 +1,17 @@
 function main()
 
-caseFname = 'Inp_CaseList.in';
+fileID = fopen('InputFiles.in');
+inputFiles = 
+fclose(fileID);
+caseFname = 'Inp_WhatToFit.csv';
 infoFname = 'Inp_Info.in';
-GAFname = 'Inp_GACtl.in';
+GAFname = 'Inp_GAOptions.in';
 
-cases = readCaseFile(caseFname);
+cases = readtable(caseFname);
 
 info = readInfoFile(infoFname);
 
-GAopt = readGAControlFile(GAFname);
+GAoptions = readGAOptionsFile(GAFname);
 
 optimizationStart();
 

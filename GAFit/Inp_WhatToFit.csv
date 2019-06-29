@@ -1,0 +1,13 @@
+FilePath,SimOut,Column x,Column y,Start,End,description
+FittingDataFiles/gs12_C1.SS,epsc3.out,1,7,0.05,5.00E-01,Compression 1 of 12um grains
+FittingDataFiles/gs12_C2.SS,epsc3.out,2,8,0.05,5.00E-01,Compression 2 of 12um grains
+FittingDataFiles/gs12_C3.SS,epsc3.out,3,9,0.05,5.00E-01,Compression 3 of 12um grains
+FittingDataFiles/gs20_C1.SS,epsc3.out,1,7,0.05,5.00E-01,Compression 1 of 20um grains
+FittingDataFiles/gs20_C2.SS,epsc3.out,2,8,0.05,5.00E-01,Compression 2 of 20um grains
+FittingDataFiles/gs20_C3.SS,epsc3.out,3,9,0.05,5.00E-01,Compression 3 of 20um grains
+FittingDataFiles/gs20_T1.SS,epsc3.out,1,7,0.05,5.00E-01,Tension 1 of 20um grains
+FittingDataFiles/gs20_T2.SS,epsc3.out,2,8,0.05,5.00E-01,Tension 2 of 20um grains
+FittingDataFiles/gs20_T3.SS,epsc3.out,3,9,0.05,5.00E-01,Tension 3 of 20um grains
+FittingDataFiles/gs30_C2.SS,epsc3.out,2,8,0.05,5.00E-01,Compression 2 of 30um grains
+FittingDataFiles/gs30_C3.SS,epsc3.out,3,9,0.05,5.00E-01,Compression 3 of 30um grains
+FittingDataFiles/gs30_SS.SS,epsc3.out,4,10,0.05,5.00E-01,Shear strain of 30um grains
