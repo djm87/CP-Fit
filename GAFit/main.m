@@ -35,8 +35,14 @@ GAoptions = readGAOptionsFile(GAFname);
 % population is generated
 setupRunFolders(cases,GAoptions.PopulationSize,runSource);
 
-%% 
+%% Start optimization
+optimizationStart(cases,fitParam,info,runSource,GAoptions);
 
-optimizationStart(cases,fitParam,info,GAoptions);
+%% Delete the run folders to clean up space
+if (info.sysInfo.sysType == 1)
+    system('rm -r RunningFolder');
+else
+    system('rmdir RunningFolder /s');
+end
 
 end

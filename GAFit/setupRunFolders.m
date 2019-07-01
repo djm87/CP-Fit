@@ -6,9 +6,7 @@ if (exist(runFold,'dir') == 7)
 else
     mkdir(runFold);
 end
-
 caseIDs = cases{1:end,'CaseIdentifier'};
-
 sourceDir = dir(runSource);
 sourceDir([sourceDir.isdir]) = [];
 
@@ -30,7 +28,6 @@ for i = 1:length(caseIDs)
             destFile = [curDir,'/',sourceDir(k).name];
             copyfile(sourceFile,destFile);
         end
-        
         % Copy the contents of the run files specific to each case from the
         % folders specified by CaseIdentifier column inside the source file
         % folder

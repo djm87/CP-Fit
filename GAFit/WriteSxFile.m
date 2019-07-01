@@ -1,10 +1,26 @@
-function [ output_args ] = WriteSxFile(fname,inputs,cases)
+function WriteSxFile(fname,inputs,caseID)
 %Specify the case specific parameters using doubles, tripplets etc..
 
-%Scale parameters
-par=inputs(:,1).*inputs(:,5);
+% fname is the full path that allows function to write the parameter file
+% directly into each of the running folders
+fileID = fopen(fname,'w');
 
-fileID=fopen(fname,'w');	
+% inputs has two columns - first column is all the parameters for this
+% population for each parameter, second column is the scaling factor for the
+% parameter.
+par = inputs(:,1).*inputs(:,2);
+
+% caseIDs provides information about the case that is currently writing.
+% This can be used to distinguish the different grain size cases as long as
+% it matches the given inputs.
+if (strcmp(caseID(end-2:end),'12'))
+    grainSize = 1;
+elseif (strcmp(caseID(end-2:end),'20'))
+    grainSize = 2;
+else
+    grainSize = 3;
+end
+
 fprintf(fileID,'*Material: Titanium                                                                                                               \n');
 fprintf(fileID,'HEXAGONAL                                crysym                                                                                   \n');
 fprintf(fileID,'1.  1.  1.587     90.  90.  120.         cdim(i),cang(i)                                                                          \n');
@@ -111,9 +127,10 @@ fprintf(fileID,' 0 -1  1  1     0 -1  1 -2                                      
 fprintf(fileID,' 1 -1  0  1     1 -1  0 -2                                                                                                        \n');
 fprintf(fileID,'-------------------                                                                                                               \n');
 fprintf(fileID,'DISLOCATION MODEL                                                                                                                 \n');
-fprintf(fileID,'  %9.7g 1.0 1                       !GRSZE, SCLGAMD0, iddsys                                                                       \n',par(cases)); %mean grain size used in HP equations for twins grain size set by aspect ratios in .in
+fprintf(fileID,'  %9.7g 1.0 1                       !GRSZE, SCLGAMD0, iddsys                                                                       \n',par(grainSize)); %mean grain size used in HP equations for twins grain size set by aspect ratios in .in
 fprintf(fileID,'  0.086 1.380622e-23 1.e-03        !k_deb, BOLTZMAN (J/K),  REF STRAIN RATE (1/s)   k_deb hard coded in EPSC see 3.20             \n');
-fprintf(fileID,'PRISMATIC                                                                                                                         \n'); oset=6;
+fprintf(fileID,'PRISMATIC                                                                                                                         \n');
+oset=6;
 fprintf(fileID,' 2.95e-10 0.53779 %7.5g            !BURG (m), KOVB3 (J/Km^3), NORM ACTENER g IN EQ. (3.12)                                        \n',par(oset+3));
 fprintf(fileID,' %7.5g %7.5g                  !KGENER-K1 IN EQ. (3.8) (1/m), DRAG STRESS-D IN EQ. (3.12) (Pa)                                \n',par(oset+2),par(oset+4));
 fprintf(fileID,' 1.E+7                             ! EDOT_O IN EQ. (3.12)                                                                         \n');
