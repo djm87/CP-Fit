@@ -3,24 +3,21 @@
 1
 *Program executable name
 a.out
-*-------------------------------
-**Fitting Data
-*Path of parameter table
-ModelRunFiles/Fitting_inputs10_custom.csv
-*Number of table headers
-5
-*Table headers, capitalization matters
-Parameters
-lowerBound
-upperBound
-fitFlag
-scaling
-*Recipe header
-fitFlag
-*-------------------------------
-**Fitting Strategy
-*Fitting range
-0.03
-0.3
+**Fitting Strategies
 *Shifting, 0 - no shifting, non-zero - specifies the amount of shifting
 0
+**GA Inputs, if [] use single space, if an array [2.12,3.1415,1] use 2.12 3.1415 1
+*Run one time for testing flag, 1 - run GA once, 0 - perform the whole run
+0
+*A	
+ 
+*b
+ 
+*Aeq
+ 
+*beq
+ 
+*Non-linear constraints, note this is typically a user-defined function, add @ in front of the function name
+ 
+*Integer Constraints, if both non-zero, solver type is expected to be ga instead of gamultiobj
+0 0

@@ -1,40 +1,42 @@
 function info = readInfoFile(infoFname)
 
-fileID = fopen(infoFname,'r');
+file = fileread(infoFname);
+fileText = regexp(file, '\r\n|\r|\n', 'split')';
 
-fgetl(fileID); % System info title
-fgetl(fileID); % System type
-info.systemInfo.sysType = str2double(fgetl(fileID));
-fgetl(fileID); % Program exe name
-info.systemInfo.exeName = fgetl(fileID);
-fgetl(fileID); % Section break
+% system information
+info.sysInfo.sysType = str2double(fileText{3});
+info.sysInfo.exeName = fileText{5};
 
-fgetl(fileID); % GA info title
-fgetl(fileID); % Population number type
-info.GAInfo.popNumType = str2double(fgetl(fileID));
-fgetl(fileID); % Scaling factor
-info.GAInfo.scaleFactor = str2double(fgetl(fileID));
-fgetl(fileID); % Section break
+% fitting strategy
+info.fitStrat.ishift = str2double(fileText{8});
 
-fgetl(fileID); % Run parameter info title
-fgetl(fileID); % Parameter table path
-info.runInfo.paramTablePath = fgetl(fileID);
-fgetl(fileID); % Number of headers in the parameter table
-info.runInfo.paramNumTableHeaders = str2double(fgetl(fileID));
-fgetl(fileID); % Table column headers
-info.runInfo.paramTableHeaders = cell(1,info.runInfo.paramNumTableHeaders);
-for i = 1:info.runInfo.paramNumTableHeaders
-    info.runInfo.paramTableHeaders{i} = fgetl(fileID);
+% GA inputs
+info.GAinp.iSingleRunGA = str2double(fileText{11});
+if (fileText{13} == ' ')
+    info.GAinp.A = [];
+else
+    info.GAinp.A = str2num(fileText{13});
 end
-fgetl(fileID); % Recipe header
-info.runInfo.paramRecipeHeader = fgetl(fileID);
-fgetl(fileID); % Section break
-
-fgetl(fileID); % Fitting strategy title
-fgetl(fileID); % Shifting
-info.fitInfo.ishift = str2double(fgetl(fileID));
-
-
-fclose(fileID);
+if (fileText{15} == ' ')
+    info.GAinp.b = [];
+else
+    info.GAinp.b = str2num(fileText{15});
+end
+if (fileText{17} == ' ')
+    info.GAinp.Aeq = [];
+else
+    info.GAinp.Aeq = str2num(fileText{17});
+end
+if (fileText{19} == ' ')
+    info.GAinp.beq = [];
+else
+    info.GAinp.beq = str2num(fileText{19});
+end
+if (fileText{21} == ' ')
+    info.GAinp.nonlcon = [];
+else
+    info.GAinp.nonlcon = fileText{21};
+end
+info.GAinp.IntCon = str2num(fileText{23});
 
 end

@@ -1,17 +1,17 @@
-function optimizationStart(info)
+function optimizationStart(cases,fitParam,info,GAoptions)
 
 % Read in fitting parameters for DD law
-Table = readtable(info.runInfo.paramTablePath);
+Table = fitParam;
 inputs = Table{1:end,info.runInfo.paramTableHeaders};
 % Select a Refinement Recipe
 toRefine = find(Table{1:end,{info.runInfo.paramRecipeHeader}}==true);
 
-%% Set environment and runtime options 
+% Set environment and runtime options 
 %GA parametrs - should be chosen carefully...
-maxGens=9;
-maxPop=10*length(toRefine);
+maxGens = GAoptions.MaxGenerations;
+maxPop = GAoptions.PopulationSize;
 
-runFit=true; %when false it runs a single case
+runFit = info.GAinp.iSingleRunGA; %when false it runs a single case
 
 boundsType=2; %1 for blanket percent difference, 2 for custom read in from csv 
 boundDiff=0.6; %used if boundsType=1 
@@ -101,18 +101,14 @@ if runFit==true
     end
     nVars = length(ub);
     % ub = [100,28r0,280,2.5,2.5,2.5];%,30]; % grain sizes commented out
-    A = [];
-    b = [];
-    Aeq = [];
-    beq = [];
+    
+    A = info.GAinp.A;
+    b = info.GAinp.b;
+    Aeq = info.GAinp.Aeq;
+    beq = info.GAinp.beq;
 
     % For integer parameters replace the following until the next ------------
-    options = optimoptions('gamultiobj','PlotFcn',...
-        eval('{@gaplotrange,@gaplotselection,@gaplotbestindiv,@gaplotscorediversity,@gaplotstopping,@gaplotgenealogy}'),...
-        'FunctionTolerance',0.1,'MaxGenerations',9,'MaxStallGenerations',20,...
-        'PopulationSize',90,'ParetoFraction',0.35,'Display','iter',...
-        'UseVectorized',true,...
-        'DistanceMeasureFcn',eval('{@distancecrowding,''genotype''}'));
+    options = GAoptions;
 
     [xOut,Fval,exitFlag,Output] = gamultiobj(@(x) fun(x,systemParams),nVars,A, ...
         b,Aeq,beq,lb,ub,options);
