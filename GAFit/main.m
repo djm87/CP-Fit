@@ -33,7 +33,7 @@ GAoptions = readGAOptionsFile(GAFname);
 % Creating a folder for each population and each run-case, load files are
 % written at this time but parameter files will be written later when the
 % population is generated
-setupRunFolders(cases,info.GAinp.pop,runSource);
+setupRunFolders(cases,GAoptions.PopulationSize,runSource);
 
 %% 
 
