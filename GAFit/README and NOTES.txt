@@ -15,5 +15,5 @@ The program establishes the folders where each case and each population will be 
 Make sure to place the respective files in the folders and make sure the folder names are specified correctly in the
 Inp_WhatToFit.csv file.
 The files that are common to all runs should be directly inside the source folder, currently EPSCSource.
-The files that are unique to individual runs should be inside the respective subfolders inside the source folder.
-The files that are unique to each population should be created as a function and embedded in the WriteFileWrapper.m
+The files that are unique to each case should be inside the respective subfolders inside the source folder.
+The files that are unique to each population should be written directly into the run folders with WriteSxFile

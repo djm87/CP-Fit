@@ -1,0 +1,30 @@
+Al
+1	Number of phases
+        Information about grain shape:
+1                       Grain Shape and Orientation Control (0 non-evolving ellipsoid; 1 evolving ellipsoid; 2 individual ellipsoid)
+1.0  1.0  1.0           Initial Ellipsoid Ratios
+0.0  0.0  0.0           Initial Euler Angle Ellipsoid Axes
+        Name and Path for Texture File:
+Tex_20.TEX
+1			Rotations Due to Slip - IE Texture evolution (0 for no, 1 for yes)
+        Name and Path for Material Data File (Single Crystal File):
+Titanium.sx
+	Hardening law, backstress, coated inclusion, 2site, iTwinLaw
+3 0 0 0 2 0
+        Precision Settings for Convergence Procedures
+100                     itmax_mod
+0.001               error_mod
+100                     itmax_grain
+        Input/Output Settings for the Run
+0                       "i_prev_proc" - Reads state from previous process (1=YES or 0=NO) and related file:
+dummy.out
+10000                     "itexskip" - Sets Frequency of Texture Downloads
+0       "i_diff_dir"    Read diffracting planes and directions (1=YES or 0=NO) and file:
+tens/be_ls.dif
+0       "i_strpf"       Read directions and calculate strain pole figure (1=YES or 0=NO):
+        Number of thermomechanical processes to be run:
+3                       "nproc"
+        Path and Name for Process Files
+Comp_C3_0pt02.pro
+Comp_C3_0pt2.pro
+Comp_C3_0pt4.pro

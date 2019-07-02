@@ -30,6 +30,8 @@ Titanium.sx
 **System Information
 *Program executable name
 a.out
+*Slurm Flag
+1
 *Slurm Parallel nodes
 1
 *Slurm tasks-per-cpu
@@ -44,3 +46,5 @@ GAFit
 general
 *Slurm max ram in MB
 300000
+*Number of parallel Slurm jobs
+4

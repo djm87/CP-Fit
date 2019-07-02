@@ -287,7 +287,7 @@ for i = [gen]%1:runGeneration %Generation loops
 %             'FontSize',12);
 %         legend('boxoff')
 %         
-%        subplot(1,3,3)
+%         subplot(1,3,3)
 %         strain=ActPH2(:,1);
 %         phaseFrac=ActPH2(:,2);
 %         plot(strain,smooth(ActPH2(:,4),5),'-','LineWidth',3, 'Color','b')

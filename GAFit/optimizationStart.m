@@ -5,6 +5,8 @@ Table = fitParam;
 % Determine the fitting recipe
 toRefine = find(Table.fitFlag == true);
 
+systemParams = {cases;fitParam;info;GAoptions;runFoldName};
+
 %% Global Variables
 global runData;
 runData.params = cell(GAoptions.MaxGenerations,1); % number of generations
@@ -31,35 +33,40 @@ if info.GAinp.iSingleRunGA==true
     IntCon = info.GAinp.IntCon(1):info.GAinp.IntCon(2);
     
     if (info.GAinp.gaType == 1)
-        [xOut,Fval,exitFlag,Output] = ga(@(x) fun(x,cases,fitParam,info,GAoptions),...
+        [xOut,Fval,exitFlag,Output] = ga(@(x) fun(x,systemParams),...
             nVars,A,b,Aeq,beq,lb,ub,nonlcon,IntCon,GAoptions);
     else
-        [xOut,Fval,exitFlag,Output] = gamultiobj(@(x) fun(x,cases,fitParam,info,GAoptions),...
+        [xOut,Fval,exitFlag,Output] = gamultiobj(@(x) fun(x,systemParams),...
             nVars,A,b,Aeq,beq,lb,ub,nonlcon,GAoptions);
     end
     
     if (info.fitStrat.isave == 1)
         %Addded bit so there is no overwriting
-        cd(rootPath);
         fname1='AllVars.mat';
         fname2='runData.mat';
         fname3='Fitting_inputs.csv';
         cnt=0;
         
-        while exist(fname1)~=false
+        while (exist(fname1,2))
             cnt=cnt+1;
             fname1=['AllVars' int2str(cnt) '.mat'];
             fname2=['runData' int2str(cnt) '.mat'];
             fname3=['Fitting_inputs' int2str(cnt) '.csv'];
         end
         save(fname1, '-regexp', '^(?!(runData)$).');
-        save([rootPath,'/',fname2],'runData');
+        save(fname2,'runData');
     end
-else 
+else
+    fname4 = 'oneRunError.mat';
+    fname5 = 'oneRunAllVars.mat';
+    fname6 = 'oneRunRunData.mat';
     errTotal = VPSC_WrapperFunction_MultObj(Table{toRefine,{'Parameters'}}',systemParams);
+    save(fname4,errTotal);
+    save(fname5,'-regexp', '^(?!(runData)$).');
+    save(fname6,'runData');
 end
 
-%% Make plot of the model
+%% Make plot of the model of the lowest error in the last generation
 plotGen = GAoptions.MaxGenerations - 1;
 [~,plotPop] = min(sum(runData.err{plotGen,1},2));
 
@@ -71,19 +78,31 @@ Table{toRefine,{'fitFlag'}}=1;
 writetable(Table,fname3);
 
 caseDataFiles = cases{1:end,'FilePath'};
-for i = 1:numel(caseDataFiles)
-    exp = importdata(caseDataFiles{i});
-    sim = runData.mainSimData{plotGen}{plotPop,i};
-    ActPH1=runData.activitiesPH1{plotGen}{plotPop,i};
-    ActPH2=runData.activitiesPH2{plotGen}{plotPop,i};
-    ActPH3=runData.activitiesPH3{plotGen}{plotPop,i};
+if (info.fitStrat.iplot == 2)
+    for i = 1:numel(caseDataFiles)
+        exp = importdata(caseDataFiles{i});
+        sim = runData.mainSimData{plotGen}{plotPop,i};
+        ActPH1=runData.activitiesPH1{plotGen}{plotPop,i};
+%         ActPH2=runData.activitiesPH2{plotGen}{plotPop,i};
+%         ActPH3=runData.activitiesPH3{plotGen}{plotPop,i};
         
-    figure(cases.PlotFigure(i));
-    hold on;
-    plot(exp(:,1),exp(:,2),'--');
-    plot(sim(:,1),exp(:,2));
-    
-    figure();
+        figure(cases.PlotFigure(i));
+        subplot(1,2,1);
+        hold on;
+        plot(exp(:,1),exp(:,2),'--');
+        plot(sim(:,1),exp(:,2));
+        
+        strain=ActPH1(:,1);
+        phaseFrac=ActPH1(:,2);
+        subplot(1,2,2);
+        hold on;
+        plot(strain,smooth(ActPH1(:,4),5),'-','LineWidth',3, 'Color','b')
+        hold on
+        plot(strain,smooth(ActPH1(:,6),5),'-','LineWidth',3, 'Color','g')
+        plot(strain,smooth(ActPH1(:,5),5),'-','LineWidth',3, 'Color','r')
+        plot(strain,phaseFrac,'--','lineWidth',3, 'Color','k')
+        plot(strain,smooth(ActPH1(:,9),5),'--','lineWidth',3, 'Color','y')
+        plot(strain,smooth(ActPH1(:,10),5),'--','lineWidth',3, 'Color','c')
+    end
 end
-
 end

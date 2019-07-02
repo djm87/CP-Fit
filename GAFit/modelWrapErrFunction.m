@@ -1,4 +1,4 @@
-function errTotal = modelWrapErrFunction(par,cases,fitParam,info,GAoptions)
+function errTotal = modelWrapErrFunction(par,systemParams)
 
 %% Global Variables
 global runData; 
@@ -7,15 +7,20 @@ runGeneration = runGeneration + 1;
 runData.params{runGeneration} = par;
 
 %% Shared variable localization
+cases = systemParams{1};
+fitParam = systemParams{2};
+info = systemParams{3};
+runFoldName = systemParams{5};
+
+caseIDs = cases{1:end,'CaseIdentifier'};
+paramFname = info.modelInfo.paramFileName;
 fitRange = [cases.Start,cases.End];
 Table = fitParam;
 ishift = info.fitStrat.ishift;
 nPop = size(par,1);
+totalCases = length(caseIDs);
 
 %% Write sx files
-caseIDs = cases{1:end,'CaseIdentifier'};
-paramFname = info.modelInfo.paramFileName;
-
 % write the sx files for each specific case then they will be copied into
 % each population run folder
 paramScaling = Table.scaling;
@@ -24,26 +29,25 @@ for i = 1:nPop
     input(Table.fitFlag == true) = par(i,:);
     for j = 1:numel(caseIDs)
         % writes the parameter file nPop times for each case
-        WriteSxFile(['RunningFolder/',num2str(j),'/',num2str(i),'/',paramFname],[input,paramScaling],caseIDs{j});
+        WriteSxFile([runFoldName,'/',num2str(i),'/',num2str(j),'/',paramFname],[input,paramScaling],caseIDs{j});
     end
 end
 
 %% Write slurm batch scripts and execute the scripts
 % The batch script should run each executable in the RunningFolder
-WriteCallParallel(info,cases,GAoptions);
-WriteGAFitBatch();
-if (isunix)
-    [~,~] = system('sbatch --wait CallParallel.sh');
+if (isunix && info.sysInfo.slurmFlag)
+    WriteCallParallelSlurm(systemParams);
+    [~,~] = system('sbatch --wait CallParallelSlurm.sh');
 end
 
 %% 
-curSimData = cell(nPop*length(caseIDs),1);
-activitiesPH1 = cell(nPop*length(caseIDs),1);
-activitiesPH2 = cell(nPop*length(caseIDs),1);
-activitiesPH3 = cell(nPop*length(caseIDs),1);
-errors = zeros(nPop*length(caseIDs),1);
-runData.ssCurves{runGeneration} = cell(nPop,length(caseIDs));
-runData.err{runGeneration} = zeros(nPop,length(caseIDs));
+curSimData = cell(nPop*totalCases,1);
+activitiesPH1 = cell(nPop*totalCases,1);
+activitiesPH2 = cell(nPop*totalCases,1);
+activitiesPH3 = cell(nPop*totalCases,1);
+errors = zeros(nPop*totalCases,1);
+runData.ssCurves{runGeneration} = cell(nPop,totalCases);
+runData.err{runGeneration} = zeros(nPop,totalCases);
 
 outputFileName = cases.SimOut;
 colX = cases.ColumnX;
@@ -52,7 +56,7 @@ dataFiles = cases.FilePath;
 parfor i = 1:nPop
     for j = 1:numel(caseIDs)
         % save the data
-        vpscData = importdata(['RunningFolder/',caseIDs{j},'/',num2str(i),'/',outputFileName{j}]); %#ok<PFBNS>
+        vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/',outputFileName{j}]); %#ok<PFBNS>
         vpscData = vpscData.data(colX(j),colY(j)); %#ok<PFBNS>
         curSimData{i} = vpscData;
         
@@ -71,13 +75,13 @@ parfor i = 1:nPop
         
         errors(i) = calcError(ishift,expX,expY,simFitFcn,fitRange(j)); %#ok<PFBNS>
         
-        vpscData = importdata(['RunningFolder/',caseIDs{j},'/',num2str(i),'/ACT_PH1.OUT']);
+        vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH1.OUT']);
         vpscData = vpscData.data;
         activitiesPH1{i} = vpscData;
-        vpscData = importdata(['RunningFolder/',caseIDs{j},'/',num2str(i),'/ACT_PH2.OUT']);
+        vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH2.OUT']);
         vpscData = vpscData.data;
         activitiesPH2{i} = vpscData;
-        vpscData = importdata(['RunningFolder/',caseIDs{j},'/',num2str(i),'/ACT_PH3.OUT']);
+        vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH3.OUT']);
         vpscData = vpscData.data;
         activitiesPH3{i} = vpscData;
     end

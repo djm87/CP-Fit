@@ -1,6 +1,6 @@
 function main()
 %% Collecting information
-inputFiles = fileread('GAFit.in');
+inputFiles = fileread('Inp_GAFit.in');
 inputFiles = regexp(inputFiles, '\r\n|\r|\n', 'split')';
 
 caseFname = inputFiles{2};
@@ -8,6 +8,7 @@ fitParamFname = inputFiles{4};
 infoFname = inputFiles{6};
 GAFname = inputFiles{8};
 runSource = inputFiles{10};
+runFoldName = inputFiles{12};
 
 % Reading in the csv file containing information on the experimental data
 % and where to find the simulation results
@@ -33,7 +34,7 @@ GAoptions = readGAOptionsFile(GAFname);
 % Creating a folder for each population and each run-case, load files are
 % written at this time but parameter files will be written later when the
 % population is generated
-setupRunFolders(cases,GAoptions.PopulationSize,runSource);
+setupRunFolders(cases,GAoptions.PopulationSize,runSource,runFoldName);
 
 %% Initialize parallel pool
 p = gcp('nocreate'); % If no pool, do not create new one.
@@ -45,10 +46,10 @@ end
 optimizationStart(cases,fitParam,info,runSource,GAoptions);
 
 %% Delete the run folders to clean up space
-if (info.sysInfo.sysType == 1)
-    system('rm -r RunningFolder');
+if (isunix)
+    system(['rm -r ',runFoldName]);
 else
-    system('rmdir RunningFolder /s');
+    system('rmdir ',runFoldName,' /s');
 end
 
 end

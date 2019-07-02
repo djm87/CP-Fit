@@ -1,10 +1,9 @@
-function setupRunFolders(cases,populationSize,runSource)
+function setupRunFolders(cases,populationSize,runSource,runFoldName)
 
-runFold = 'RunningFolder';
-if (exist(runFold,'dir') == 7)
+if (exist(runFoldName,'dir') == 7)
     disp('RunningFolder already exist.');
 else
-    mkdir(runFold);
+    mkdir(runFoldName);
 end
 caseIDs = cases{1:end,'CaseIdentifier'};
 sourceDir = dir(runSource);
@@ -17,7 +16,7 @@ for i = 1:length(caseIDs)
     caseDir = dir(curCase);
     caseDir([caseDir.isdir]) = [];
     for j = 1:populationSize
-        curDir = [runFold,'/',num2str(i),'/',num2str(j)];
+        curDir = [runFoldName,'/',num2str(j),'/',num2str(i)];
         if (exist(curDir,'dir') ~= 7)
             mkdir(curDir);
         end

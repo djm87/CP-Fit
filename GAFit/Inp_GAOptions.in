@@ -12,11 +12,11 @@ PlotFcn
 FunctionTolerance
 +0.1
 MaxGenerations
-+9
++2
 MaxStallGenerations
 +20
 PopulationSize
-+100
++2
 ParetoFraction
 +0.35
 Display
