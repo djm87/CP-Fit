@@ -1,6 +1,6 @@
-function [ output_args ] = WriteSxFile(fname,systemPar,dir)
+function [ output_args ] = WriteLoadFile(fname,systemPar,dir)
     % Parameters to write 
-increments=systemPar{8}(2)*1000;
+increments=systemPar;
 fileID=fopen(fname,'w');
 if dir=='C1'
     fprintf(fileID,'%d   1   0.001   298.         nsteps  ictrl  eqincr  temp\n',increments);
