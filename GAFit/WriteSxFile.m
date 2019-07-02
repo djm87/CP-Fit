@@ -13,12 +13,12 @@ par = inputs(:,1).*inputs(:,2);
 % caseIDs provides information about the case that is currently writing.
 % This can be used to distinguish the different grain size cases as long as
 % it matches the given inputs.
-if (strcmp(caseID(end-2:end),'12'))
-    grainSize = 1;
-elseif (strcmp(caseID(end-2:end),'20'))
-    grainSize = 2;
+if (contains(caseID,'12'))
+    grainSize = 1.78*0.00001;
+elseif (contains(caseID,'20'))
+    grainSize = 2.22*0.00001;
 else
-    grainSize = 3;
+    grainSize = 2.61*0.00001;
 end
 
 fprintf(fileID,'*Material: Titanium                                                                                                               \n');
@@ -127,7 +127,7 @@ fprintf(fileID,' 0 -1  1  1     0 -1  1 -2                                      
 fprintf(fileID,' 1 -1  0  1     1 -1  0 -2                                                                                                        \n');
 fprintf(fileID,'-------------------                                                                                                               \n');
 fprintf(fileID,'DISLOCATION MODEL                                                                                                                 \n');
-fprintf(fileID,'  %9.7g 1.0 1                       !GRSZE, SCLGAMD0, iddsys                                                                       \n',par(grainSize)); %mean grain size used in HP equations for twins grain size set by aspect ratios in .in
+fprintf(fileID,'  %9.7g 1.0 1                       !GRSZE, SCLGAMD0, iddsys                                                                       \n',grainSize); %mean grain size used in HP equations for twins grain size set by aspect ratios in .in
 fprintf(fileID,'  0.086 1.380622e-23 1.e-03        !k_deb, BOLTZMAN (J/K),  REF STRAIN RATE (1/s)   k_deb hard coded in EPSC see 3.20             \n');
 fprintf(fileID,'PRISMATIC                                                                                                                         \n');
 oset=6;

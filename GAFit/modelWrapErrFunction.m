@@ -1,4 +1,4 @@
-function errTotal = modelWrapErrFunction(par,cases,fitParam,info)
+function errTotal = modelWrapErrFunction(par,cases,fitParam,info,GAoptions)
 
 %% Global Variables
 global runData; 
@@ -10,7 +10,6 @@ runData.params{runGeneration} = par;
 fitRange = [cases.Start,cases.End];
 Table = fitParam;
 ishift = info.fitStrat.ishift;
-isystem = info.sysInfo.sysType;
 nPop = size(par,1);
 
 %% Write sx files
@@ -20,15 +19,22 @@ paramFname = info.modelInfo.paramFileName;
 % write the sx files for each specific case then they will be copied into
 % each population run folder
 paramScaling = Table.scaling;
-parfor i = 1:nPop
+input = Table.Parameters;
+for i = 1:nPop
+    input(Table.fitFlag == true) = par(i,:);
     for j = 1:numel(caseIDs)
         % writes the parameter file nPop times for each case
-        WriteSxFile(['RunningFolder/',caseIDs{j},'/',num2str(i),'/',paramFname],[par(i,:)',paramScaling],caseIDs{j});
+        WriteSxFile(['RunningFolder/',num2str(j),'/',num2str(i),'/',paramFname],[input,paramScaling],caseIDs{j});
     end
 end
 
 %% Write slurm batch scripts and execute the scripts
 % The batch script should run each executable in the RunningFolder
+WriteCallParallel(info,cases,GAoptions);
+WriteGAFitBatch();
+if (isunix)
+    [~,~] = system('sbatch --wait CallParallel.sh');
+end
 
 %% 
 curSimData = cell(nPop*length(caseIDs),1);
@@ -43,7 +49,6 @@ outputFileName = cases.SimOut;
 colX = cases.ColumnX;
 colY = cases.ColumnY;
 dataFiles = cases.FilePath;
-fitRange = [cases.Start,cases.End];
 parfor i = 1:nPop
     for j = 1:numel(caseIDs)
         % save the data

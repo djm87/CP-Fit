@@ -3,50 +3,56 @@ function info = readInfoFile(infoFname)
 file = fileread(infoFname);
 fileText = regexp(file, '\r\n|\r|\n', 'split')';
 
-% system information
-info.sysInfo.sysType = str2double(fileText{3});
-info.sysInfo.exeName = fileText{5};
-
 % fitting strategy
-info.fitStrat.ishift = str2num(fileText{8});
-info.fitStrat.isave = str2double(fileText{10});
-info.fitStrat.iplot = str2double(fileText{12});
+info.fitStrat.ishift = str2num(fileText{3});
+info.fitStrat.isave = str2double(fileText{5});
+info.fitStrat.iplot = str2double(fileText{7});
 
 % GA inputs
-info.GAinp.gaType = str2double(fileText{15});
-info.GAinp.iSingleRunGA = str2double(fileText{17});
-if (fileText{19} == ' ')
+info.GAinp.gaType = str2double(fileText{10});
+info.GAinp.iSingleRunGA = str2double(fileText{12});
+if (fileText{14} == ' ')
     info.GAinp.A = [];
 else
-    info.GAinp.A = str2num(fileText{19});
+    info.GAinp.A = str2num(fileText{14});
 end
-if (fileText{21} == ' ')
+if (fileText{16} == ' ')
     info.GAinp.b = [];
 else
-    info.GAinp.b = str2num(fileText{21});
+    info.GAinp.b = str2num(fileText{16});
 end
-if (fileText{23} == ' ')
+if (fileText{18} == ' ')
     info.GAinp.Aeq = [];
 else
-    info.GAinp.Aeq = str2num(fileText{23});
+    info.GAinp.Aeq = str2num(fileText{18});
 end
-if (fileText{25} == ' ')
+if (fileText{20} == ' ')
     info.GAinp.beq = [];
 else
-    info.GAinp.beq = str2num(fileText{25});
+    info.GAinp.beq = str2num(fileText{20});
 end
-if (fileText{27} == ' ')
+if (fileText{22} == ' ')
     info.GAinp.nonlcon = [];
 else
-    info.GAinp.nonlcon = fileText{27};
+    info.GAinp.nonlcon = fileText{22};
 end
-info.GAinp.IntCon = str2num(fileText{29});
+info.GAinp.IntCon = str2num(fileText{24});
 
-if (fileText{32} == ' ')
+if (fileText{27} == ' ')
     info.modelInfo.paramFilePath = '/';
 else
-    info.modelInfo.paramFilePath = ['/',fileText{32},'/'];
+    info.modelInfo.paramFilePath = ['/',fileText{27},'/'];
 end
-info.modelInfo.paramFileName = fileText{34};
+info.modelInfo.paramFileName = fileText{29};
+
+% system information
+info.sysInfo.exeName = fileText{32};
+info.sysInfo.parNode = str2double(fileText{34});
+info.sysInfo.parTasks = str2double(fileText{36});
+info.sysInfo.poolSize = str2double(fileText{38});
+info.sysInfo.slurmMaxTime = fileText{40};
+info.sysInfo.slurmJobName = fileText{42};
+info.sysInfo.slurmPartition = fileText{44};
+info.sysInfo.slurmMaxRam = str2double(fileText{46});
 
 end

@@ -1,13 +1,8 @@
-**System Information
-*System type, 1 - linux, 2 - windows
-1
-*Program executable name
-a.out
 **Fitting Strategies
 *Shifting, 0 - no shifting, non-zero - specifies the amount of shifting, third value - specifies number of shifting increments
 0 0 10
 *Saving data
-0
+1
 *Plot final fit, 0 - no plotting, 1 - plot in 1 figure, 2 - plot separately
 2
 **GA Inputs, if [] use single space, if an array [2.12,3.1415,1] use 2.12 3.1415 1
@@ -32,3 +27,20 @@ a.out
  
 *Parameter file name
 Titanium.sx
+**System Information
+*Program executable name
+a.out
+*Slurm Parallel nodes
+1
+*Slurm tasks-per-cpu
+32
+*Parpool size
+8
+*Slurm max time day-hrs:min:sec
+1-00:00:00
+*Slurm job name
+GAFit
+*Slurm partition
+general
+*Slurm max ram in MB
+300000

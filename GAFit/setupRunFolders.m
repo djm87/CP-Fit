@@ -17,7 +17,7 @@ for i = 1:length(caseIDs)
     caseDir = dir(curCase);
     caseDir([caseDir.isdir]) = [];
     for j = 1:populationSize
-        curDir = [runFold,'/',caseIDs{i},'/',num2str(j)];
+        curDir = [runFold,'/',num2str(i),'/',num2str(j)];
         if (exist(curDir,'dir') ~= 7)
             mkdir(curDir);
         end

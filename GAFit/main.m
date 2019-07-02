@@ -35,6 +35,12 @@ GAoptions = readGAOptionsFile(GAFname);
 % population is generated
 setupRunFolders(cases,GAoptions.PopulationSize,runSource);
 
+%% Initialize parallel pool
+p = gcp('nocreate'); % If no pool, do not create new one.
+if (isempty(p))
+    parpool('local',info.sysInfo.poolSize);
+end
+
 %% Start optimization
 optimizationStart(cases,fitParam,info,runSource,GAoptions);
 

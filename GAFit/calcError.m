@@ -11,7 +11,7 @@ if (sum(abs(ishift(1:2)))) % for some shifting amount of [-a,+b], -a < +b
     for shift = 1:N
         shiftAmount = shiftX(shift);
         tempx = expX + shiftAmount;
-
+        
         % Fit original model/experiment to a function
         if length(tempx)>200
             [origDatax,origDatay] = prepareCurveData(downsample(tempx,200),...
