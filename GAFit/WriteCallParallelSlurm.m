@@ -56,7 +56,7 @@ fprintf(fid,'for ((i=beginning; i<ending; i++));do\n');
 fprintf(fid,'   JobsOnThisNode[$i]=${JobNames[$i]}\n');
 fprintf(fid,'done\n\n');
 
-fprintf(fid,'for i in ${JobsOnThisNode[@]};do echo $i;done | xargs -n1 -P ${SLURM_NTASKS_PER_NODE} sh  -c '' "$1" '' sh;\n');
+fprintf(fid,'for i in ${JobsOnThisNode[@]};do echo $i;done | xargs -n1 -P ${SLURM_NTASKS_PER_NODE} bash runExe.sh\n');
 fclose(fid);
 
 end

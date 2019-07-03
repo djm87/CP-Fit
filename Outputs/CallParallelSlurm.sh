@@ -8,7 +8,7 @@
 #SBATCH -e GAFit_%A-%a.err        # Standard error log
 #SBATCH --array=0-04           # Array range
 
-nFolders=2
+nFolders=3
 nCases=3
 
 for ((i=0; i<nFolders; i++));do
@@ -33,4 +33,4 @@ for ((i=beginning; i<ending; i++));do
    JobsOnThisNode[$i]=${JobNames[$i]}
 done
 
-for i in ${JobsOnThisNode[@]};do echo $i;done | xargs -n1 -P ${SLURM_NTASKS_PER_NODE} sh  -c ' "$1" ' sh;
+for i in ${JobsOnThisNode[@]};do echo $i;done | xargs -n1 -P ${SLURM_NTASKS_PER_NODE} bash runExe.sh

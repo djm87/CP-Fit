@@ -18,7 +18,7 @@ global runGeneration;
 runGeneration = 0;
 
 %% Optimization Run
-if info.GAinp.iSingleRunGA==true
+if (info.GAinp.iSingleRunGA == 0)
     fun = @modelWrapErrFunction;
     
     lb = Table{toRefine,{'lowerBound'}};
@@ -30,7 +30,7 @@ if info.GAinp.iSingleRunGA==true
     beq = info.GAinp.beq;
     nonlcon = info.GAinp.nonlcon;
     IntCon = info.GAinp.IntCon(1):info.GAinp.IntCon(2);
-    
+    GAoptions
     if (info.GAinp.gaType == 1)
         [xOut,Fval,exitFlag,Output] = ga(@(x) fun(x,systemParams),...
             nVars,A,b,Aeq,beq,lb,ub,nonlcon,IntCon,GAoptions);
@@ -39,6 +39,9 @@ if info.GAinp.iSingleRunGA==true
             nVars,A,b,Aeq,beq,lb,ub,nonlcon,GAoptions);
     end
     
+    FigList = findobj(allchild(0), 'flat', 'Type', 'figure');
+    savefig(FigList,'GAFigs.fig');
+    
     if (info.fitStrat.isave == 1)
         %Addded bit so there is no overwriting
         fname1='AllVars.mat';
@@ -46,7 +49,7 @@ if info.GAinp.iSingleRunGA==true
         fname3='Fitting_inputs.csv';
         cnt=0;
         
-        while (exist(fname1,2))
+        while (exist(fname1,'file'))
             cnt=cnt+1;
             fname1=['AllVars' int2str(cnt) '.mat'];
             fname2=['runData' int2str(cnt) '.mat'];
@@ -56,13 +59,11 @@ if info.GAinp.iSingleRunGA==true
         save(fname2,'runData');
     end
 else
-    fname4 = 'oneRunError.mat';
-    fname5 = 'oneRunAllVars.mat';
-    fname6 = 'oneRunRunData.mat';
+    fname4 = 'oneRunAllVars.mat';
+    fname5 = 'oneRunRunData.mat';
     errTotal = modelWrapErrFunction(Table{toRefine,{'Parameters'}}',systemParams);
-    save(fname4,errTotal);
-    save(fname5,'-regexp', '^(?!(runData)$).');
-    save(fname6,'runData');
+    save(fname4,'-regexp', '^(?!(runData)$).');
+    save(fname5,'runData');
 end
 
 %% Make plot of the model of the lowest error in the last generation

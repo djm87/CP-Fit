@@ -16,7 +16,7 @@ MaxGenerations
 MaxStallGenerations
 +20
 PopulationSize
-+2
++3
 ParetoFraction
 +0.35
 Display

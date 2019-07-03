@@ -17,7 +17,8 @@ paramFname = info.modelInfo.paramFileName;
 fitRange = [cases.Start,cases.End];
 Table = fitParam;
 ishift = info.fitStrat.ishift;
-nPop = size(par,1);
+par
+nPop = size(par,1)
 totalCases = length(caseIDs);
 
 %% Write sx files
@@ -26,8 +27,10 @@ totalCases = length(caseIDs);
 paramScaling = Table.scaling;
 input = Table.Parameters;
 for i = 1:nPop
-    input(Table.fitFlag == true) = par(i,:);
+    i
+    input(Table.fitFlag == true) = par(i,:)';
     for j = 1:numel(caseIDs)
+        j
         % writes the parameter file nPop times for each case
         WriteSxFile([runFoldName,'/',num2str(i),'/',num2str(j),'/',paramFname],[input,paramScaling],caseIDs{j});
     end
@@ -73,7 +76,7 @@ for i = 1:nPop
         [simModelx, simModely] = prepareCurveData(simModx,simMody);
         [simFitFcn, ~] = fit(simModelx,simModely,'smoothingspline');
         
-        errors(i) = calcError(ishift,expX,expY,simFitFcn,fitRange(j));
+        errors(i) = calcError(ishift,expX,expY,simFitFcn,fitRange(j,:),simModelx);
         
         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH1.OUT']);
         vpscData = vpscData.data;

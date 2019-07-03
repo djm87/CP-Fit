@@ -1,4 +1,4 @@
-function err = calcError(ishift,expX,expY,simFitFcn,fitRange)
+function err = calcError(ishift,expX,expY,simFitFcn,fitRange,simModelx)
 
 if (sum(abs(ishift(1:2)))) % for some shifting amount of [-a,+b], -a < +b
     lb = ishift(1);
@@ -20,8 +20,10 @@ if (sum(abs(ishift(1:2)))) % for some shifting amount of [-a,+b], -a < +b
             [origDatax,origDatay] = prepareCurveData(tempx,expY);                
         end
         [expFitFcn,~] = fit(origDatax,origDatay,'smoothingspline');
-
-        xIn = linspace(fitRange(1),fitRange(2),100); % error calculation range
+        
+        adjMinFit = max([fitRange(1),tempx(1),simModelx(1)]);
+        adjMaxFit = min([fitRange(2),tempx(end),simModelx(end)]);
+        xIn = linspace(adjMinFit,adjMaxFit,100); % error calculation range
 
         funDiff = simFitFcn(xIn) - expFitFcn(xIn);
         diffSq = funDiff.^2;
@@ -34,7 +36,9 @@ else % if ishift is [0,0]
     [origDatax,origDatay] = prepareCurveData(expX,expY);
     [expFitFcn,~] = fit(origDatax,origDatay,'smoothingspline');
     
-    xIn = linspace(fitRange(1),fitRange(2),100);
+    adjMinFit = max([fitRange(1),expX(1),simModelx(1)]);
+    adjMaxFit = min([fitRange(2),expX(end),simModelx(end)]);
+    xIn = linspace(adjMinFit,adjMaxFit,100);
 
     funDiff = simFitFcn(xIn) - expFitFcn(xIn);
     diffSq = funDiff.^2;
