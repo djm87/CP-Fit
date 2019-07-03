@@ -35,7 +35,7 @@ end
 
 %% Write slurm batch scripts and execute the scripts
 % The batch script should run each executable in the RunningFolder
-if (isunix && info.sysInfo.slurmFlag)
+if (isunix && (info.sysInfo.slurmFlag == 1))
     WriteCallParallelSlurm(systemParams);
     [~,~] = system('sbatch --wait CallParallelSlurm.sh');
 end
@@ -53,11 +53,11 @@ outputFileName = cases.SimOut;
 colX = cases.ColumnX;
 colY = cases.ColumnY;
 dataFiles = cases.FilePath;
-parfor i = 1:nPop
+for i = 1:nPop
     for j = 1:numel(caseIDs)
         % save the data
-        vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/',outputFileName{j}]); %#ok<PFBNS>
-        vpscData = vpscData.data(colX(j),colY(j)); %#ok<PFBNS>
+        vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/',outputFileName{j}]);
+        vpscData = [vpscData.data(:,colX(j)),vpscData.data(:,colY(j))];
         curSimData{i} = vpscData;
         
         % Calculate error ------------------------------------------------
@@ -65,7 +65,7 @@ parfor i = 1:nPop
         simMody = abs(vpscData(:,2));
         
         % Determine the case
-        expData = importdata(dataFiles{j}); %#ok<PFBNS>
+        expData = importdata(dataFiles{j});
         expX = expData(:,1);
         expY = expData(:,2);
         
@@ -73,7 +73,7 @@ parfor i = 1:nPop
         [simModelx, simModely] = prepareCurveData(simModx,simMody);
         [simFitFcn, ~] = fit(simModelx,simModely,'smoothingspline');
         
-        errors(i) = calcError(ishift,expX,expY,simFitFcn,fitRange(j)); %#ok<PFBNS>
+        errors(i) = calcError(ishift,expX,expY,simFitFcn,fitRange(j));
         
         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH1.OUT']);
         vpscData = vpscData.data;

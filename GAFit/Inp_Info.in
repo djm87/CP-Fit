@@ -4,13 +4,13 @@
 *Saving data
 1
 *Plot final fit, 0 - no plotting, 1 - plot in 1 figure, 2 - plot separately
-2
+0
 **GA Inputs, if [] use single space, if an array [2.12,3.1415,1] use 2.12 3.1415 1
 *ga versus gamultiobj, 1 - ga, 2 - gamultiobj
-2	
+2
 *Run one time for testing flag, 1 - run GA once, 0 - perform the whole run
 0
-*A	
+*A
  
 *b
  

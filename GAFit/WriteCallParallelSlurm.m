@@ -39,7 +39,7 @@ fprintf(fid,'  jname=$((${i} + 1))\n');
 fprintf(fid,'  for ((j=0; j<nCases; j++));do\n');
 fprintf(fid,'     linIndx=$((${i} * ${nCases} + ${j}))\n');
 fprintf(fid,'     cname=$((${j} + 1))\n');
-fprintf(fid,'     JobNames[${linIndx}]="./%s/$jname/$cname/%s"\n',runFoldName,exeFname);
+fprintf(fid,'     JobNames[${linIndx}]="cd %s/%s/$jname/$cname/ && ./%s"\n',pwd,runFoldName,exeFname);
 fprintf(fid,'  done\n');
 fprintf(fid,'done\n\n');
 
@@ -56,7 +56,7 @@ fprintf(fid,'for ((i=beginning; i<ending; i++));do\n');
 fprintf(fid,'   JobsOnThisNode[$i]=${JobNames[$i]}\n');
 fprintf(fid,'done\n\n');
 
-fprintf(fid,'for i in ${JobsOnThisNode[@]};do echo $i;done | xargs -n1 -P ${SLURM_NTASKS_PER_NODE} sh  -c ''"$1"'' sh;\n');
+fprintf(fid,'for i in ${JobsOnThisNode[@]};do echo $i;done | xargs -n1 -P ${SLURM_NTASKS_PER_NODE} sh  -c '' "$1" '' sh;\n');
 fclose(fid);
 
 end

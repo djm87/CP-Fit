@@ -1,4 +1,4 @@
 FilePath,CaseIdentifier,SimOut,Column x,Column y,Start,End,PlotFigure,description
-FittingDataFiles/gs12_C1.SS,C1_12,STR_STR.OUT,1,7,0,1.00E-03,1,Compression 1 of 12um grains
-FittingDataFiles/gs12_C2.SS,C2_12,STR_STR.OUT,2,8,0,1.00E-03,1,Compression 2 of 12um grains
-FittingDataFiles/gs12_C3.SS,C3_12,STR_STR.OUT,3,9,0,1.00E-03,1,Compression 3 of 12um grains
+FittingDataFiles/gs12_C1.SS,C1_12,STR_STR.OUT,1,2,0,1.00E-03,1,Compression 1 of 12um grains
+FittingDataFiles/gs12_C2.SS,C2_12,STR_STR.OUT,1,2,0,1.00E-03,1,Compression 2 of 12um grains
+FittingDataFiles/gs12_C3.SS,C3_12,STR_STR.OUT,1,2,0,1.00E-03,1,Compression 3 of 12um grains

@@ -1,5 +1,4 @@
-function optimizationStart(cases,fitParam,info,GAoptions)
-
+function optimizationStart(cases,fitParam,info,GAoptions,runFoldName)
 % Read in fitting parameters for DD law
 Table = fitParam;
 % Determine the fitting recipe
@@ -60,7 +59,7 @@ else
     fname4 = 'oneRunError.mat';
     fname5 = 'oneRunAllVars.mat';
     fname6 = 'oneRunRunData.mat';
-    errTotal = VPSC_WrapperFunction_MultObj(Table{toRefine,{'Parameters'}}',systemParams);
+    errTotal = modelWrapErrFunction(Table{toRefine,{'Parameters'}}',systemParams);
     save(fname4,errTotal);
     save(fname5,'-regexp', '^(?!(runData)$).');
     save(fname6,'runData');

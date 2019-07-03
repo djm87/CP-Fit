@@ -46,8 +46,8 @@ end
 info.modelInfo.paramFileName = fileText{29};
 
 % system information
-info.sysInfo.slurmFlag = str2double(fileText{32});
-info.sysInfo.exeName = fileText{34};
+info.sysInfo.exeName = fileText{32};
+info.sysInfo.slurmFlag = str2double(fileText{34});
 info.sysInfo.parNode = str2double(fileText{36});
 info.sysInfo.parTasks = str2double(fileText{38});
 info.sysInfo.poolSize = str2double(fileText{40});
