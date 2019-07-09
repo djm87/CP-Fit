@@ -60,19 +60,9 @@ info.sysInfo.slurmNParallelJobs = str2double(fileText{50});
 
 %% Check for additional fitting information and read the additional files
 cyclicCaseIDs = cases{cases{1:end,{'IsCyclic'}} == true,{'CaseIdentifier'}};
-cyclicCaseFiles = cases{cases{1:end,{'IsCyclic'}} == true,{'FilePath'}};
 info.cyclicFits = cell(length(cyclicCaseIDs),1);
 for i = 1:length(cyclicCaseIDs)
     info.cyclicFits{i,1} = importdata([cyclicCaseIDs{i},'.in']);
-    data = importdata(cyclicCaseFiles{i});
-    info.cyclicFits{i,2} = data(info.cyclicFits{i,1}(:,1),:);
-    info.cyclicFits{i,3} = data(info.cyclicFits{i,1}(:,2),:);
-    
-    % Convert cyclic data to a monotonically increasing data for error
-    % evaluation, basically take each specified section and stack together
-    for j = 1:size(info.cyclicFits{i,1},1)
-        
-    end
 end
 
 PFCaseIDs = cases{cases{1:end,{'IsPF'}} == true,{'CaseIdentifier'}};

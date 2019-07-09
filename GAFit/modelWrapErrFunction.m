@@ -73,14 +73,14 @@ for i = 1:nPop
         if (iCyclic(j) == 1)
             % If cyclic, split the case into N cases. For each case,
             % calculate an error and take the average on the given indices
-            errorstmp = zeros(size(info.cyclicFits{i,1},1),1);
+            errorstmp = zeros(size(info.cyclicFits{i},1),1);
             simDataInc = 1;
             iflip = 1; % 1 looks for strain value greater, 2 looks for strain value lesser
             
-            for k = 1:size(info.cyclicFits{i,1},1)
+            for k = 1:size(info.cyclicFits{i},1)
                 % Split experimental data
-                expX2 = expX(info.cyclicFits{i,1}(k,1):info.cyclicFits{i,1}(k,2));
-                expY2 = expY(info.cyclicFits{i,1}(k,1):info.cyclicFits{i,1}(k,2));
+                expX2 = expX(info.cyclicFits{i}(k,1):info.cyclicFits{i}(k,2));
+                expY2 = expY(info.cyclicFits{i}(k,1):info.cyclicFits{i}(k,2));
                 
                 simTmpXInds = [0,0];
                 % Find the section of the simulation data that matches
