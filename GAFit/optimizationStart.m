@@ -30,7 +30,7 @@ if (info.GAinp.iSingleRunGA == 0)
     beq = info.GAinp.beq;
     nonlcon = info.GAinp.nonlcon;
     IntCon = info.GAinp.IntCon(1):info.GAinp.IntCon(2);
-    GAoptions
+    
     if (info.GAinp.gaType == 1)
         [xOut,Fval,exitFlag,Output] = ga(@(x) fun(x,systemParams),...
             nVars,A,b,Aeq,beq,lb,ub,nonlcon,IntCon,GAoptions);

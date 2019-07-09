@@ -16,9 +16,7 @@ caseIDs = cases{1:end,'CaseIdentifier'};
 paramFname = info.modelInfo.paramFileName;
 fitRange = [cases.Start,cases.End];
 Table = fitParam;
-ishift = info.fitStrat.ishift;
-par
-nPop = size(par,1)
+nPop = size(par,1);
 totalCases = length(caseIDs);
 
 %% Write sx files
@@ -27,10 +25,8 @@ totalCases = length(caseIDs);
 paramScaling = Table.scaling;
 input = Table.Parameters;
 for i = 1:nPop
-    i
     input(Table.fitFlag == true) = par(i,:)';
     for j = 1:numel(caseIDs)
-        j
         % writes the parameter file nPop times for each case
         WriteSxFile([runFoldName,'/',num2str(i),'/',num2str(j),'/',paramFname],[input,paramScaling],caseIDs{j});
     end
@@ -56,6 +52,8 @@ outputFileName = cases.SimOut;
 colX = cases.ColumnX;
 colY = cases.ColumnY;
 dataFiles = cases.FilePath;
+iCyclic = cases.IsCyclic;
+iPF = cases.IsPF;
 for i = 1:nPop
     for j = 1:numel(caseIDs)
         % save the data
@@ -72,11 +70,67 @@ for i = 1:nPop
         expX = expData(:,1);
         expY = expData(:,2);
         
-        % Fit simulated model data to a function
-        [simModelx, simModely] = prepareCurveData(simModx,simMody);
-        [simFitFcn, ~] = fit(simModelx,simModely,'smoothingspline');
-        
-        errors(i) = calcError(ishift,expX,expY,simFitFcn,fitRange(j,:),simModelx);
+        if (iCyclic(j) == 1)
+            % If cyclic, split the case into N cases. For each case,
+            % calculate an error and take the average on the given indices
+            errorstmp = zeros(size(info.cyclicFits{i,1},1),1);
+            simDataInc = 1;
+            iflip = 1; % 1 looks for strain value greater, 2 looks for strain value lesser
+            
+            for k = 1:size(info.cyclicFits{i,1},1)
+                % Split experimental data
+                expX2 = expX(info.cyclicFits{i,1}(k,1):info.cyclicFits{i,1}(k,2));
+                expY2 = expY(info.cyclicFits{i,1}(k,1):info.cyclicFits{i,1}(k,2));
+                
+                simTmpXInds = [0,0];
+                % Find the section of the simulation data that matches
+                if (iflip == 1)
+                    while (simDataInc <= length(simModx))
+                        if (simModx(simDataInc) >= expX2(1) && simTmpXInds(1) == 0)
+                            simTmpXInds(1) = simDataInc;
+                        elseif (simModx(simDataInc) >= expX2(end) && simTmpXInds(2) == 0)
+                            simTmpXInds(2) = simDataInc;
+                            simDataInc = simDataInc + 1;
+                            break;
+                        elseif (simDataInc == length(simModx))
+                            simTmpXInds(2) = simDataInc;
+                        end
+                        simDataInc = simDataInc + 1;
+                    end
+                    iflip = 2;
+                else
+                    while (simDataInc <= length(simModx))
+                        if (simModx(simDataInc) <= expX2(1) && simTmpXInds(1) == 0)
+                            simTmpXInds(1) = simDataInc;
+                        elseif (simModx(simDataInc) <= expX2(end) && simTmpXInds(2) == 0)
+                            simTmpXInds(2) = simDataInc;
+                            simDataInc = simDataInc + 1;
+                            break;
+                        elseif (simDataInc == length(simModx))
+                            simTmpXInds(2) = simDataInc;
+                        end
+                        simDataInc = simDataInc + 1;
+                    end
+                    iflip = 1;
+                end
+                
+                simModx2 = simModx(simTmpXInds(1):simTmpXInds(2));
+                simMody2 = simMody(simTmpXInds(1):simTmpXInds(2));
+                
+                fitRange2 = [expX2(1),expX2(end)];
+                
+                errorstmp(i) = calcError(info.fitStrat.ishift,expX2,expY2,...
+                    fitRange2,simModx2,simMody2);
+            end
+            errors(i) = sqrt(mean(errorstmp.^2));
+            
+        elseif (iPF(j) == 1)
+            errors(i) = calcError(info.fitStrat.ishift,expX,expY,...
+                fitRange(j,:),simModx,simMody);
+        else
+            errors(i) = calcError(info.fitStrat.ishift,expX,expY,...
+                fitRange(j,:),simModx,simMody);
+        end
         
         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH1.OUT']);
         vpscData = vpscData.data;

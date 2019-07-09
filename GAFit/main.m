@@ -23,7 +23,7 @@ fitParam = readtable(fitParamFname);
 % type of operating system and the name of the executable of the model to
 % be run. ishift flag for considering a shifted curve in the errors.
 % Also contains all the other GA inputs.
-info = readInfoFile(infoFname);
+info = readInfoFile(infoFname,cases);
 
 % Reading in the text file containing all the genetic algorithm options
 % the user wishes to use. The function should be flexible enough to take on
