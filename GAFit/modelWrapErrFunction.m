@@ -37,6 +37,36 @@ end
 if (isunix && (info.sysInfo.slurmFlag == 1))
     WriteCallParallelSlurm(systemParams);
     [~,~] = system('sbatch --wait CallParallelSlurm.sh');
+elseif (info.sysInfo.slurmFlag == 2)
+    jobList = cell(nPop*totalCases,1);
+    jobCommand = cell(nPop*totalCases,1);
+    jobCount = 1;
+    for i = 1:nPop
+        for j = 1:totalCases
+            jobList{jobCount} = [runFoldName,'/',num2str(i),'/',num2str(j)];
+            jobCommand{jobCount} = ['cd /d ',jobList{i},' && ',info.sysInfo.exeName];
+            jobCount = jobCount + 1;
+        end
+    end
+    
+    parfor i = 1:length(jobList)
+        [~,~] = system(jobCommand{i});
+    end
+elseif (info.sysInfo.slurmFlag == 3)
+    jobList = cell(nPop*totalCases,1);
+    jobCommand = cell(nPop*totalCases,1);
+    jobCount = 1;
+    for i = 1:nPop
+        for j = 1:totalCases
+            jobList{jobCount} = [runFoldName,'/',num2str(i),'/',num2str(j)];
+            jobCommand{jobCount} = ['cd ',jobList{i},' && ./',info.sysInfo.exeName];
+            jobCount = jobCount + 1;
+        end
+    end
+    
+    parfor i = 1:length(jobList)
+        [~,~] = system(jobCommand{i});
+    end
 end
 
 %% 

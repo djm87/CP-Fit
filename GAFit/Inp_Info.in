@@ -29,9 +29,9 @@
 Titanium.sx
 **System Information
 *Program executable name
-a.out
-*Slurm Flag
-1
+main.exe
+*Slurm Flag, 1 - slurm, 2 - regular windows, 3 - regular linux
+2
 *Slurm Parallel nodes
 1
 *Slurm tasks-per-cpu
