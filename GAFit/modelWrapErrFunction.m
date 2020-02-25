@@ -13,6 +13,7 @@ info = systemParams{3};
 runFoldName = systemParams{5};
 
 caseIDs = cases{1:end,'CaseIdentifier'};
+FittingWeight = cases{1:end,'FittingWeight'};
 paramFname = info.modelInfo.paramFileName;
 fitRange = [cases.Start,cases.End];
 Table = fitParam;
@@ -149,10 +150,9 @@ for i = 1:nPop
                 
                 fitRange2 = [expX2(1),expX2(end)];
                 
-                errorstmp(i) = calcError(info.fitStrat.ishift,expX2,expY2,...
-                    fitRange2,simModx2,simMody2);
+                errorstmp(k) = calcError(expX2,expY2,fitRange2,simModx2,simMody2);
             end
-            errors(i) = sqrt(mean(errorstmp.^2));
+            errors(i) = mean(errorstmp);
             
         elseif (iPF(j) == 1)
             errors(i) = calcError(info.fitStrat.ishift,expX,expY,...
