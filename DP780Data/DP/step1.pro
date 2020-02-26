@@ -11,7 +11,7 @@ Boundary Conditions of Deformation Step, "ietbc33"
 1 0 1
 1 1 0
 Total Deformation Tensor for the Process, "etbc33"
-0.01984   0.0   0.0
+0.01997   0.0   0.0
 0.0   0.0   0.0
 0.0   0.0   0.0
 __________________________________

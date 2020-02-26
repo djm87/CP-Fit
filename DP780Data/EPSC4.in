@@ -28,7 +28,7 @@ Diff.txt
 Diff.txt
 0       "i_strpf"       Read directions and calculate strain pole figure (1=YES or 0=NO):
         Number of thermomechanical processes to be run:
-16 16 1                       "nproc", "nproc_cycle", "ncycle"
+17 17 1                       "nproc", "nproc_cycle", "ncycle"
         Path and Name for Process Files
 DP/step1.pro
 DP/step2.pro
@@ -47,5 +47,7 @@ DP/step14.pro
 DP/step15.pro
 DP/step16.pro
 DP/step17.pro
+
+
 		Path and Name for additional files
 dummy.in		
