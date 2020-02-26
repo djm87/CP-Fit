@@ -24,7 +24,7 @@
 0 0
 **Model Information
 *Parameter file path, if same folder as executable use space as above, if different folder, write folder name only: Al
- 
+DP
 *Parameter file name
 Titanium.sx
 **System Information
@@ -37,7 +37,7 @@ main.exe
 *Slurm tasks-per-cpu
 32
 *Parpool size
-8
+4
 *Slurm max time day-hrs:min:sec
 1-00:00:00
 *Slurm job name

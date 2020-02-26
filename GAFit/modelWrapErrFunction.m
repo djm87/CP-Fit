@@ -29,7 +29,7 @@ for i = 1:nPop
     input(Table.fitFlag == true) = par(i,:)';
     for j = 1:numel(caseIDs)
         % writes the parameter file nPop times for each case
-        WriteSxFile([runFoldName,'/',num2str(i),'/',num2str(j),'/',paramFname],[input,paramScaling],caseIDs{j});
+        writeDPSxFile([runFoldName,'/',num2str(i),'/',num2str(j),'/',paramFname],[input,paramScaling],caseIDs{j});
     end
 end
 

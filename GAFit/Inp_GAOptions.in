@@ -14,9 +14,9 @@ FunctionTolerance
 MaxGenerations
 +2
 MaxStallGenerations
-+20
++2
 PopulationSize
-+3
++2
 ParetoFraction
 +0.35
 Display

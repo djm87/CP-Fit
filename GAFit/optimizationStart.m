@@ -82,7 +82,7 @@ if (info.fitStrat.iplot == 2)
     for i = 1:numel(caseDataFiles)
         exp = importdata(caseDataFiles{i});
         sim = runData.mainSimData{plotGen}{plotPop,i};
-        ActPH1=runData.activitiesPH1{plotGen}{plotPop,i};
+%         ActPH1=runData.activitiesPH1{plotGen}{plotPop,i};
 %         ActPH2=runData.activitiesPH2{plotGen}{plotPop,i};
 %         ActPH3=runData.activitiesPH3{plotGen}{plotPop,i};
         
@@ -92,17 +92,17 @@ if (info.fitStrat.iplot == 2)
         plot(exp(:,1),exp(:,2),'--');
         plot(sim(:,1),exp(:,2));
         
-        strain=ActPH1(:,1);
-        phaseFrac=ActPH1(:,2);
-        subplot(1,2,2);
-        hold on;
-        plot(strain,smooth(ActPH1(:,4),5),'-','LineWidth',3, 'Color','b')
-        hold on
-        plot(strain,smooth(ActPH1(:,6),5),'-','LineWidth',3, 'Color','g')
-        plot(strain,smooth(ActPH1(:,5),5),'-','LineWidth',3, 'Color','r')
-        plot(strain,phaseFrac,'--','lineWidth',3, 'Color','k')
-        plot(strain,smooth(ActPH1(:,9),5),'--','lineWidth',3, 'Color','y')
-        plot(strain,smooth(ActPH1(:,10),5),'--','lineWidth',3, 'Color','c')
+%         strain=ActPH1(:,1);
+%         phaseFrac=ActPH1(:,2);
+%         subplot(1,2,2);
+%         hold on;
+%         plot(strain,smooth(ActPH1(:,4),5),'-','LineWidth',3, 'Color','b')
+%         hold on
+%         plot(strain,smooth(ActPH1(:,6),5),'-','LineWidth',3, 'Color','g')
+%         plot(strain,smooth(ActPH1(:,5),5),'-','LineWidth',3, 'Color','r')
+%         plot(strain,phaseFrac,'--','lineWidth',3, 'Color','k')
+%         plot(strain,smooth(ActPH1(:,9),5),'--','lineWidth',3, 'Color','y')
+%         plot(strain,smooth(ActPH1(:,10),5),'--','lineWidth',3, 'Color','c')
     end
 end
 end

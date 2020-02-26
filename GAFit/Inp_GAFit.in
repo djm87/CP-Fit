@@ -1,7 +1,7 @@
 *File containing a table that lists the experimental cases to be fit
 Inp_WhatToFit.csv
 *File containing a table that lists the parameters to be fit
-Inp_FittingParams.csv
+Inp_FittingParams_DP.csv
 *File containing information on operating system, fitting strategy, and genetic algorithm inputs
 Inp_Info.in
 *File containing all the genetic algorithm options the user wishes to use
