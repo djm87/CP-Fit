@@ -10,9 +10,9 @@ systemParams = {cases;fitParam;info;GAoptions;runFoldName};
 global runData;
 runData.params = cell(GAoptions.MaxGenerations,1); % number of generations
 runData.mainSimData = cell(GAoptions.MaxGenerations,1); % number of generations
-runData.activitiesPH1 = cell(GAoptions.MaxGenerations,1); % number of generations
-runData.activitiesPH2 = cell(GAoptions.MaxGenerations,1); % number of generations
-runData.activitiesPH3 = cell(GAoptions.MaxGenerations,1); % number of generations
+% runData.activitiesPH1 = cell(GAoptions.MaxGenerations,1); % number of generations
+% runData.activitiesPH2 = cell(GAoptions.MaxGenerations,1); % number of generations
+% runData.activitiesPH3 = cell(GAoptions.MaxGenerations,1); % number of generations
 runData.err = cell(GAoptions.MaxGenerations,1); % number of generations
 global runGeneration;
 runGeneration = 0;

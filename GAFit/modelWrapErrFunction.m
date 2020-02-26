@@ -1,4 +1,4 @@
-function errTotal = modelWrapErrFunction(par,systemParams)
+function errors = modelWrapErrFunction(par,systemParams)
 
 %% Global Variables
 global runData; 
@@ -72,10 +72,10 @@ end
 
 %% 
 curSimData = cell(nPop*totalCases,1);
-activitiesPH1 = cell(nPop*totalCases,1);
-activitiesPH2 = cell(nPop*totalCases,1);
-activitiesPH3 = cell(nPop*totalCases,1);
-errors = zeros(nPop*totalCases,1);
+% activitiesPH1 = cell(nPop*totalCases,1);
+% activitiesPH2 = cell(nPop*totalCases,1);
+% activitiesPH3 = cell(nPop*totalCases,1);
+errors = zeros(nPop,totalCases);
 runData.ssCurves{runGeneration} = cell(nPop,totalCases);
 runData.err{runGeneration} = zeros(nPop,totalCases);
 
@@ -150,35 +150,48 @@ for i = 1:nPop
                 
                 fitRange2 = [expX2(1),expX2(end)];
                 
-                errorstmp(k) = calcError(expX2,expY2,fitRange2,simModx2,simMody2);
+                if (info.fitStrat.ishift == 1)
+                    errorstmp(k) = calcErrorShift(expX2,expY2,fitRange2,simModx2,simMody2);
+                else
+                    errorstmp(k) = calcError(expX2,expY2,fitRange2,simModx2,simMody2);
+                end
             end
-            errors(i) = mean(errorstmp);
+            errors(i,j) = FittingWeight(j)*mean(errorstmp);
             
         elseif (iPF(j) == 1)
-            errors(i) = calcError(info.fitStrat.ishift,expX,expY,...
-                fitRange(j,:),simModx,simMody);
+            % Add pole figure error calculation here
+%             if (info.fitStrat.ishift == 1)
+%                 errors(i,j) = FittingWeight(j)*calcErrorShift(expX,expY,fitRange(j,:),simModx,simMody);
+%             else
+%                 errors(i,j) = FittingWeight(j)*calcError(expX,expY,fitRange(j,:),simModx,simMody);
+%             end
         else
-            errors(i) = calcError(info.fitStrat.ishift,expX,expY,...
-                fitRange(j,:),simModx,simMody);
+            if (info.fitStrat.ishift == 1)
+                errors(i,j) = FittingWeight(j)*calcErrorShift(expX,expY,fitRange(j,:),simModx,simMody);
+            else
+                errors(i,j) = FittingWeight(j)*calcError(expX,expY,fitRange(j,:),simModx,simMody);
+            end
         end
         
-        vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH1.OUT']);
-        vpscData = vpscData.data;
-        activitiesPH1{i} = vpscData;
-        vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH2.OUT']);
-        vpscData = vpscData.data;
-        activitiesPH2{i} = vpscData;
-        vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH3.OUT']);
-        vpscData = vpscData.data;
-        activitiesPH3{i} = vpscData;
+%         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH1.OUT']);
+%         vpscData = vpscData.data;
+%         activitiesPH1{i} = vpscData;
+%         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH2.OUT']);
+%         vpscData = vpscData.data;
+%         activitiesPH2{i} = vpscData;
+%         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH3.OUT']);
+%         vpscData = vpscData.data;
+%         activitiesPH3{i} = vpscData;
     end
 end
 runData.mainSimData{runGeneration} = reshape(curSimData,[nPop,totalCases]);
-runData.activitiesPH1{runGeneration} = reshape(activitiesPH1,[nPop,totalCases]);
-runData.activitiesPH2{runGeneration} = reshape(activitiesPH2,[nPop,totalCases]);
-runData.activitiesPH3{runGeneration} = reshape(activitiesPH3,[nPop,totalCases]);
-runData.err{runGeneration} = reshape(errors,[nPop,totalCases]);
-errTotal = reshape(errors,[nPop,totalCases]);
-errTotal = sum(errTotal,2);
+% runData.activitiesPH1{runGeneration} = reshape(activitiesPH1,[nPop,totalCases]);
+% runData.activitiesPH2{runGeneration} = reshape(activitiesPH2,[nPop,totalCases]);
+% runData.activitiesPH3{runGeneration} = reshape(activitiesPH3,[nPop,totalCases]);
+runData.err{runGeneration} = errors;
+
+% Sum of objective errors. Obsolete for multi-objective
+% errTotal = reshape(errors,[nPop,totalCases]);
+% errTotal = sum(errTotal,2);
 
 end
