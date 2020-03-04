@@ -105,6 +105,7 @@ for i = 1:nPop
             % If cyclic, split the case into N cases. For each case,
             % calculate an error and take the average on the given indices
             errorstmp = zeros(size(info.cyclicFits{i},1),1);
+            totSampletmp = zeros(size(info.cyclicFits{i},1),1);
             simDataInc = 1;
             iflip = 1; % 1 looks for strain value greater, 2 looks for strain value lesser
             
@@ -151,25 +152,32 @@ for i = 1:nPop
                 fitRange2 = [expX2(1),expX2(end)];
                 
                 if (info.fitStrat.ishift == 1)
-                    errorstmp(k) = calcErrorShift(expX2,expY2,fitRange2,simModx2,simMody2);
+                    [errorstmp(k),totSampletmp(k)] = calcErrorShift(expX2,expY2,fitRange2,simModx2,simMody2);
                 else
-                    errorstmp(k) = calcError(expX2,expY2,fitRange2,simModx2,simMody2);
+                    [errorstmp(k),totSampletmp(k)] = calcError(expX2,expY2,fitRange2,simModx2,simMody2);
                 end
             end
-            errors(i,j) = FittingWeight(j)*mean(errorstmp);
+            % errors are returned along with the number of samples (equal
+            % to number of sampled data in experimental data. To calculate
+            % average over all errors, the following mean is calculated:
+            % error_i = sqrt( 1/N_i * sum( ln(sim/exp)^2 ) )
+            % error = sum( error_i^2 * N_i / sum( N_i )
+            errors(i,j) = FittingWeight(j)*sqrt( sum(errorstmp.^2.*totSampletmp) / sum(totSampletmp) );
             
         elseif (iPF(j) == 1)
             % Add pole figure error calculation here
 %             if (info.fitStrat.ishift == 1)
-%                 errors(i,j) = FittingWeight(j)*calcErrorShift(expX,expY,fitRange(j,:),simModx,simMody);
+%                 [errors(i,j),totSampletmp(k)] = FittingWeight(j)*calcErrorShift(expX,expY,fitRange(j,:),simModx,simMody);
 %             else
-%                 errors(i,j) = FittingWeight(j)*calcError(expX,expY,fitRange(j,:),simModx,simMody);
+%                 [errors(i,j),totSampletmp(k)] = FittingWeight(j)*calcError(expX,expY,fitRange(j,:),simModx,simMody);
 %             end
         else
             if (info.fitStrat.ishift == 1)
-                errors(i,j) = FittingWeight(j)*calcErrorShift(expX,expY,fitRange(j,:),simModx,simMody);
+                [errors(i,j),~] = calcErrorShift(expX,expY,fitRange(j,:),simModx,simMody);
+                errors(i,j) = FittingWeight(j)*errors(i,j);
             else
-                errors(i,j) = FittingWeight(j)*calcError(expX,expY,fitRange(j,:),simModx,simMody);
+                [errors(i,j),~] = calcError(expX,expY,fitRange(j,:),simModx,simMody);
+                errors(i,j) = FittingWeight(j)*errors(i,j);
             end
         end
         
