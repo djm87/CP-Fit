@@ -43,7 +43,7 @@ optimizationStart(cases,fitParam,info,GAoptions,runFoldName);
 if (isunix)
     system(['rm -r ',runFoldName]);
 else
-    system('rmdir ',runFoldName,' /s');
+    system(['rmdir /S /Q ',runFoldName]);
 end
 
 end

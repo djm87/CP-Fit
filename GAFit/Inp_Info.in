@@ -32,9 +32,9 @@ martDD.sx
 *Program executable name
 EPSCDP780.exe
 *Slurm Flag, 1 - slurm, 2 - regular windows, 3 - regular linux
-2
-*Slurm Parallel nodes
 1
+*Slurm Parallel nodes
+2
 *Slurm tasks-per-cpu
 32
 *Parpool size

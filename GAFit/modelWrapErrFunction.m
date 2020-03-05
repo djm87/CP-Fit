@@ -50,7 +50,7 @@ runData.mainSimData{runGeneration} = reshape(curSimData,[nPop,totalCases]);
 % runData.activitiesPH1{runGeneration} = reshape(activitiesPH1,[nPop,totalCases]);
 % runData.activitiesPH2{runGeneration} = reshape(activitiesPH2,[nPop,totalCases]);
 % runData.activitiesPH3{runGeneration} = reshape(activitiesPH3,[nPop,totalCases]);
-runData.err{runGeneration} = errors;
+runData.err{runGeneration} = errors
 
 % Sum of objective errors. Obsolete for multi-objective
 % errTotal = reshape(errors,[nPop,totalCases]);
