@@ -39,8 +39,8 @@ if (info.GAinp.iSingleRunGA == 0)
             nVars,A,b,Aeq,beq,lb,ub,nonlcon,GAoptions);
     end
     
-    FigList = findobj(allchild(0), 'flat', 'Type', 'figure');
-    savefig(FigList,'GAFigs.fig');
+%     FigList = findobj(allchild(0), 'flat', 'Type', 'figure');
+%     savefig(FigList,'GAFigs.fig');
     
     if (info.fitStrat.isave == 1)
         %Addded bit so there is no overwriting

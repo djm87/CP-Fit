@@ -2,19 +2,14 @@
 *Specify the type of solver, ga or gamultiobj
 gamultiobj
 *List of MATLAB GA options, '+' is parameter for the option, '>' is parameter for function handle
-PlotFcn
-@gaplotselection
-@gaplotbestindiv
-@gaplotscorediversity
-@gaplotstopping
 FunctionTolerance
 +0.1
 MaxGenerations
-+10
++2
 MaxStallGenerations
-+10
++2
 PopulationSize
-+1000
++2
 ParetoFraction
 +0.35
 Display
@@ -25,5 +20,3 @@ DistanceMeasureFcn
 @distancecrowding
 >genotype
 *End, leave this line as end of file
-@gaplotgenealogy
-@gaplotrange

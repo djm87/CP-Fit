@@ -26,8 +26,8 @@ fprintf(fid,'#SBATCH --nodes=1\n');
 fprintf(fid,'#SBATCH --tasks-per-node=%1d\n',ncores);
 % fprintf(fid,'#SBATCH --mem-per-cpu=%dgb      # Memory per processor\n',maxRam);
 fprintf(fid,'#SBATCH --time=%s                # Time limit hrs:min:sec\n',maxTime);
-fprintf(fid,'#SBATCH --output=%s_%%A-%%a.out  # Standard output log\n',runName);
-fprintf(fid,'#SBATCH -e %s_%%A-%%a.err        # Standard error log\n',runName);
+fprintf(fid,'##SBATCH -o ./outputs/%s_%%A-%%a.out  # Standard output log\n',runName);
+fprintf(fid,'##SBATCH -e ./outputs/%s_%%A-%%a.err        # Standard error log\n',runName);
 fprintf(fid,'#SBATCH --array=0-%d%d           # Array range\n\n',narrays-1,nParJobs);
 
 % fprintf(fid,'find . -name \\*CPU* -type f -delete\n\n');

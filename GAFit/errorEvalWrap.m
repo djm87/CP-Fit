@@ -59,6 +59,9 @@ for i = 1:nPop
                 else
                     [errorstmp(k),totSampletmp(k)] = calcError(expX2,expY2,fitRange2,simModx2,simMody2);
                 end
+                if (~isreal(errorstmp(k)))
+                    save('currentBug.mat');
+                end
             end
             % errors are returned along with the number of samples (equal
             % to number of sampled data in experimental data. To calculate
@@ -83,7 +86,6 @@ for i = 1:nPop
                 errors(i,j) = FittingWeight(j)*errors(i,j);
             end
         end
-        
 %         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH1.OUT']);
 %         vpscData = vpscData.data;
 %         activitiesPH1{i} = vpscData;

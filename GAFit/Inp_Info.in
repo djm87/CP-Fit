@@ -32,7 +32,7 @@ martDD.sx
 *Program executable name
 EPSCDP780.exe
 *Slurm Flag, 1 - slurm, 2 - regular windows, 3 - regular linux
-1
+2
 *Slurm Parallel nodes
 2
 *Slurm tasks-per-cpu
@@ -44,7 +44,7 @@ EPSCDP780.exe
 *Slurm job name
 GAFit
 *Slurm partition
-general
+thrust2
 *Slurm max ram in MB
 300000
 *Number of parallel Slurm jobs
