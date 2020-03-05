@@ -23,13 +23,14 @@
 *Integer Constraints, if both non-zero, solver type is expected to be ga instead of gamultiobj
 0 0
 **Model Information
-*Parameter file path, if same folder as executable use space as above, if different folder, write folder name only: Al
-DP
+*Number of parameter files
+2
 *Parameter file name
-Titanium.sx
+ferDD.sx
+martDD.sx
 **System Information
 *Program executable name
-main.exe
+EPSCDP780.exe
 *Slurm Flag, 1 - slurm, 2 - regular windows, 3 - regular linux
 2
 *Slurm Parallel nodes

@@ -7,6 +7,6 @@ Inp_Info.in
 *File containing all the genetic algorithm options the user wishes to use
 Inp_GAOptions.in
 *Folder containing the files necessary for running each case. Load file and material file will be written separately
-VPSCSource
+EPSCSource
 *Folder to store all the run-time jobs
 RunningFolder

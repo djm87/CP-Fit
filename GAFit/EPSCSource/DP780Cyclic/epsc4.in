@@ -7,12 +7,12 @@ DP
 1.0  1.0  1.0           Initial Ellipsoid Ratios
 0.0  0.0  0.0           Initial Euler Angle Ellipsoid Axes
         Name and Path for Texture File:
-DP/tex_fer.txt
-DP/tex_mart.txt
+tex_fer.txt
+tex_mart.txt
 1			Rotations Due to Slip - IE Texture evolution (0 for no, 1 for yes)
         Name and Path for Material Data File (Single Crystal File):
-DP/ferDD.sx
-DP/martDD.sx
+ferDD.sx
+martDD.sx
 	Hardening law,iTwinLaw, iBackStress, iPhTr, iOutput, nCoatedPh, nCoatingPh, ivarBC, inonSch, interaction
 1 2 1 0 1 0 0 0 0 1.0
         Precision Settings for Convergence Procedures
@@ -30,22 +30,22 @@ Diff.txt
         Number of thermomechanical processes to be run:
 17 17 1                       "nproc", "nproc_cycle", "ncycle"
         Path and Name for Process Files
-DP/step1.pro
-DP/step2.pro
-DP/step3.pro
-DP/step4.pro
-DP/step5.pro
-DP/step6.pro
-DP/step7.pro
-DP/step8.pro
-DP/step9.pro
-DP/step10.pro
-DP/step11.pro
-DP/step12.pro
-DP/step13.pro
-DP/step14.pro
-DP/step15.pro
-DP/step16.pro
-DP/step17.pro
+step1.pro
+step2.pro
+step3.pro
+step4.pro
+step5.pro
+step6.pro
+step7.pro
+step8.pro
+step9.pro
+step10.pro
+step11.pro
+step12.pro
+step13.pro
+step14.pro
+step15.pro
+step16.pro
+step17.pro
 		Path and Name for additional files
 dummy.in		

@@ -39,24 +39,28 @@ else
 end
 info.GAinp.IntCon = str2num(fileText{24});
 
-if (fileText{27} == ' ')
-    info.modelInfo.paramFilePath = '/';
-else
-    info.modelInfo.paramFilePath = ['/',fileText{27},'/'];
+info.modelInfo.paramFileCount = str2num(fileText{27});
+
+info.modelInfo.paramFileName = cell(info.modelInfo.paramFileCount,1);
+for i = 1:info.modelInfo.paramFileCount
+    info.modelInfo.paramFileName{i} = fileText{29+(i-1)};
 end
-info.modelInfo.paramFileName = fileText{29};
+skipline = info.modelInfo.paramFileCount-1;
+if (skipline < 0)
+    skipline = 0;
+end
 
 % system information
-info.sysInfo.exeName = fileText{32};
-info.sysInfo.slurmFlag = str2double(fileText{34});
-info.sysInfo.parNode = str2double(fileText{36});
-info.sysInfo.parTasks = str2double(fileText{38});
-info.sysInfo.poolSize = str2double(fileText{40});
-info.sysInfo.slurmMaxTime = fileText{42};
-info.sysInfo.slurmJobName = fileText{44};
-info.sysInfo.slurmPartition = fileText{46};
-info.sysInfo.slurmMaxRam = str2double(fileText{48});
-info.sysInfo.slurmNParallelJobs = str2double(fileText{50});
+info.sysInfo.exeName = fileText{32+skipline};
+info.sysInfo.slurmFlag = str2double(fileText{34+skipline});
+info.sysInfo.parNode = str2double(fileText{36+skipline});
+info.sysInfo.parTasks = str2double(fileText{38+skipline});
+info.sysInfo.poolSize = str2double(fileText{40+skipline});
+info.sysInfo.slurmMaxTime = fileText{42+skipline};
+info.sysInfo.slurmJobName = fileText{44+skipline};
+info.sysInfo.slurmPartition = fileText{46+skipline};
+info.sysInfo.slurmMaxRam = str2double(fileText{48+skipline});
+info.sysInfo.slurmNParallelJobs = str2double(fileText{50+skipline});
 
 %% Check for additional fitting information and read the additional files
 cyclicCaseIDs = cases{cases{1:end,{'IsCyclic'}} == true,{'CaseIdentifier'}};

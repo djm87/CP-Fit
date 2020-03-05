@@ -1,4 +1,2 @@
 FilePath,CaseIdentifier,SimOut,Column x,Column y,Start,End,PlotFigure,IsCyclic,IsPF,FittingWeight,description
-FittingDataFiles/DP780CyclicSowmya.SS,DP780Cyclic,epsc3.out,1,7,0,0.00E+00,2,1,0,1,Cyclic data of DP 780
-,,,,,,,,,,,
-,,,,,,,,,,,
+FittingDataFiles/DP780Cyclic.SS,DP780Cyclic,epsc3.out,1,7,0,0.00E+00,2,1,0,1,Cyclic data of DP 780
