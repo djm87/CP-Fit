@@ -2,7 +2,9 @@ function runJobs(isunix,slurmFlag,systemParams,nPop,totalCases,runFoldName,exeNa
 
 if (isunix && (slurmFlag == 1))
     WriteCallParallelSlurm(systemParams);
+%     disp('here after write parallel');
     [~,~] = system('sbatch --wait CallParallelSlurm.sh');
+%     disp('here after finished running parallel slurm');
 elseif (slurmFlag == 2)
     jobList = cell(nPop*totalCases,1);
     jobCommand = cell(nPop*totalCases,1);

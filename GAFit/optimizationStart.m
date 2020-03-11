@@ -67,7 +67,7 @@ else
 end
 
 %% Make plot of the model of the lowest error in the last generation
-plotGen = GAoptions.MaxGenerations - 1;
+plotGen = runGeneration;
 [~,plotPop] = min(sum(runData.err{plotGen,1},2));
 
 Table{toRefine,{'Parameters'}}=runData.params{plotGen,1}(plotPop,:)';

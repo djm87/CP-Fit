@@ -1,51 +1,17 @@
-function [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,expX2,simTmpXInds,iflip)
-
-if (iflip == 1)
-    while (simDataInc ~= length(simModx) && (simModx(simDataInc+1) < simModx(simDataInc) || ...
-            simModx(simDataInc+1) == simModx(simDataInc) ))
-        simDataInc = simDataInc + 1;
-    end
-    while (simDataInc <= length(simModx))
-        if (simModx(simDataInc) >= expX2(1) && simTmpXInds(1) == 0)
-            simTmpXInds(1) = simDataInc;
-        elseif ( ( (simModx(simDataInc) >= expX2(end)) || ...
-                (simDataInc ~= 1 && (simModx(simDataInc) < simModx(simDataInc-1))) ) ...
-                && simTmpXInds(2) == 0)
-            if (simModx(simDataInc) < simModx(simDataInc-1))
-                simTmpXInds(2) = simDataInc-1;
-            else
-                simTmpXInds(2) = simDataInc;
-                simDataInc = simDataInc + 1;
-            end
-            break;
-        elseif (simDataInc == length(simModx))
-            simTmpXInds(2) = simDataInc;
-        end
-        simDataInc = simDataInc + 1;
-    end
-else
-    while (simDataInc ~= 1 && (simModx(simDataInc+1) > simModx(simDataInc) || ...
-                simModx(simDataInc+1) == simModx(simDataInc) ))
-        simDataInc = simDataInc + 1;
-    end
-    while (simDataInc <= length(simModx))
-        if (simModx(simDataInc) <= expX2(1) && simTmpXInds(1) == 0)
-            simTmpXInds(1) = simDataInc;
-        elseif ( ( (simModx(simDataInc) <= expX2(end)) || ...
-                (simDataInc ~= 1 && (simModx(simDataInc) > simModx(simDataInc-1))) ) ...
-                && simTmpXInds(2) == 0)
-            if (simModx(simDataInc) < simModx(simDataInc-1))
-                simTmpXInds(2) = simDataInc-1;
-            else
-                simTmpXInds(2) = simDataInc;
-                simDataInc = simDataInc + 1;
-            end
-            break;
-        elseif (simDataInc == length(simModx))
-            simTmpXInds(2) = simDataInc;
-        end
-        simDataInc = simDataInc + 1;
+function [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,simMody,expX2,expY2,iflip)
+startInd = 0;
+endInd = 0;
+% end point of each cycle should be approximately the same, find the
+% points in simulation data
+for i = simDataInc:length(simModx)
+    if (iflip*simModx(i) > iflip*expX2(1) && startInd == 0 && simMody(i)/expY2(2) > 0)
+        startInd = i;
+    elseif (iflip*simModx(i) > iflip*expX2(end) && endInd == 0 || ...
+            i == length(simModx) || (iflip*(simModx(i+1)) < iflip*(simModx(i))))
+        endInd = i;
+        break;
     end
 end
-
+simTmpXInds = [startInd,endInd];
+simDataInc = i + 1;
 end

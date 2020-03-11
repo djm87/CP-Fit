@@ -66,7 +66,7 @@ info.sysInfo.slurmNParallelJobs = str2double(fileText{50+skipline});
 cyclicCaseIDs = cases{cases{1:end,{'IsCyclic'}} == true,{'CaseIdentifier'}};
 info.cyclicFits = cell(length(cyclicCaseIDs),1);
 for i = 1:length(cyclicCaseIDs)
-    info.cyclicFits{i,1} = importdata([cyclicCaseIDs{i},'.in']);
+    info.cyclicFits{i,1} = importdata(['FittingDataFiles/',cyclicCaseIDs{i},'.in']);
 end
 
 PFCaseIDs = cases{cases{1:end,{'IsPF'}} == true,{'CaseIdentifier'}};

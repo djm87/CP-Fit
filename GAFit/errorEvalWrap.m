@@ -10,8 +10,14 @@ dataFiles = cases.FilePath;
 iCyclic = cases.IsCyclic;
 iPF = cases.IsPF;
 
-for i = 1:nPop
-    for j = 1:numel(caseIDs)
+for j = 1:numel(caseIDs)
+    % Determine the case
+    expData = importdata(dataFiles{j});
+    expX = expData(:,1);
+    expY = expData(:,2);
+    xdiff = 0; % shift data to start at (0,0) if not
+    ydiff = 0;
+    for i = 1:nPop
         % save the data
         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/',outputFileName{j}]);
         vpscData = [vpscData.data(:,colX(j)),vpscData.data(:,colY(j))];
@@ -21,31 +27,37 @@ for i = 1:nPop
         simModx = vpscData(:,1);
         simMody = vpscData(:,2);
         
-        % Determine the case
-        expData = importdata(dataFiles{j});
-        expX = expData(:,1);
-        expY = expData(:,2);
-        
         if (iCyclic(j) == 1)
             % If cyclic, split the case into N cases. For each case,
             % calculate an error and take the average on the given indices
             errorstmp = zeros(size(cyclicFits{j},1),1);
             totSampletmp = zeros(size(cyclicFits{j},1),1);
             simDataInc = 1;
-            iflip = 1; % 1 looks for strain value greater, 2 looks for strain value lesser
+            iflip = 1;
             
             for k = 1:size(cyclicFits{j},1)
                 % Split experimental data
                 expX2 = expX(cyclicFits{j}(k,1):cyclicFits{j}(k,2));
                 expY2 = expY(cyclicFits{j}(k,1):cyclicFits{j}(k,2));
                 
-                simTmpXInds = [0,0];
+                expY2_smoothed = smooth(expX2,expY2,0.1);
+                
+                if (k == 1)
+                    xdiff = expX2(1);
+                    ydiff = expY2_smoothed(1);
+                    expX2 = expX2 - xdiff;
+                    expY2_smoothed = expY2_smoothed - ydiff;
+                else
+                    expX2 = expX2 - xdiff;
+                    expY2_smoothed = expY2_smoothed - ydiff;
+                end
+                
                 % Find the section of the simulation data that matches
                 if (iflip == 1)
-                    [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,expX2,simTmpXInds,iflip);
-                    iflip = 2;
+                    [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,expX2,iflip);
+                    iflip = -1;
                 else
-                    [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,expX2,simTmpXInds,iflip);
+                    [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,expX2,iflip);
                     iflip = 1;
                 end
                 
@@ -54,10 +66,13 @@ for i = 1:nPop
                 
                 fitRange2 = [expX2(1),expX2(end)];
                 
+%                 plot(expX2,expY2_smoothed,'b','LineWidth',2);
+%                 plot(simModx2,simMody2,'k','LineWidth',3);
+                
                 if (ishift == 1)
-                    [errorstmp(k),totSampletmp(k)] = calcErrorShift(expX2,expY2,fitRange2,simModx2,simMody2);
+                    [errorstmp(k),totSampletmp(k)] = calcErrorShift(expX2,expY2_smoothed,fitRange2,simModx2,simMody2);
                 else
-                    [errorstmp(k),totSampletmp(k)] = calcError(expX2,expY2,fitRange2,simModx2,simMody2);
+                    [errorstmp(k),totSampletmp(k)] = calcError(expX2,expY2_smoothed,fitRange2,simModx2,simMody2);
                 end
                 if (~isreal(errorstmp(k)))
                     save('currentBug.mat');

@@ -36,20 +36,23 @@ else
 end
 
 evalX = expX(startX:endX);
+evalY = expY(startX:endX);
 
-streak = 0;
-for i = 1:100
-    if (simFitFcn(evalX(i)) > 0)
-        streak = streak + 1;
-    else
-        streak = 0;
-    end
-    if (streak >= 10)
-        break;
-    end
-end
-evalX = expX(startX+(i-10):endX);
-evalY = expY(startX+(i-10):endX);
+% streak = 0;
+% for i = 1:100
+%     if (simFitFcn(evalX(i)) > 0)
+%         streak = streak + 1;
+%     else
+%         streak = 0;
+%     end
+%     if (streak >= 10)
+%         break;
+%     end
+% end
+% evalX = expX(startX+(i-10):endX);
+% evalY = expY(startX+(i-10):endX);
+% 
+% plot(evalX,simFitFcn(evalX),'r--','LineWidth',4);
 
 totN = length(evalX);
 

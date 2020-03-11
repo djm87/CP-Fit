@@ -30,11 +30,11 @@ for i = 1:nPop
         writeDPSxFile([runFoldName,'/',num2str(i),'/',num2str(j),'/'],paramFname,[input,paramScaling]);
     end
 end
-
+% disp('here after writeDPSx');
 %% Write slurm batch scripts and execute the scripts
 % The batch script should run each executable in the RunningFolder
 runJobs(isunix,info.sysInfo.slurmFlag,systemParams,nPop,totalCases,runFoldName,info.sysInfo.exeName);
-
+% disp('here after run jobs');
 %% Call errorEvalWrap that calls various functions to evaluate error for each objective
 curSimData = cell(nPop*totalCases,1);
 % activitiesPH1 = cell(nPop*totalCases,1);
@@ -45,6 +45,7 @@ runData.ssCurves{runGeneration} = cell(nPop,totalCases);
 runData.err{runGeneration} = zeros(nPop,totalCases);
 
 [curSimData,errors] = errorEvalWrap(cases,nPop,caseIDs,runFoldName,curSimData,info.cyclicFits,errors,info.fitStrat.ishift);
+% disp('here after error');
 
 runData.mainSimData{runGeneration} = reshape(curSimData,[nPop,totalCases]);
 % runData.activitiesPH1{runGeneration} = reshape(activitiesPH1,[nPop,totalCases]);

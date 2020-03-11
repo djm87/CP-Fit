@@ -37,15 +37,15 @@ EPSCDP780.exe
 2
 *Slurm tasks-per-cpu
 32
-*Parpool size
+*Parpool size (for windows)
 4
 *Slurm max time day-hrs:min:sec
-1-00:00:00
+7-00:00:00
 *Slurm job name
 GAFit
 *Slurm partition
-thrust2
-*Slurm max ram in MB
-300000
+general
+*Slurm memory in GB
+1
 *Number of parallel Slurm jobs
 4
