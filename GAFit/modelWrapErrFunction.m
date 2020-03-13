@@ -17,17 +17,15 @@ paramFname = info.modelInfo.paramFileName;
 Table = fitParam;
 nPop = size(par,1);
 totalCases = length(caseIDs);
-
+size(par)
 %% Write sx files
 % write the sx files for each specific case then they will be copied into
 % each population run folder
 paramScaling = Table.scaling;
-input = Table.Parameters;
-for i = 1:nPop
-    input(Table.fitFlag == true) = par(i,:)';
+parfor i = 1:nPop
     for j = 1:numel(caseIDs)
         % writes the parameter file nPop times for each case
-        writeDPSxFile([runFoldName,'/',num2str(i),'/',num2str(j),'/'],paramFname,[input,paramScaling]);
+        writeDPSxFile([runFoldName,'/',num2str(i),'/',num2str(j),'/'],paramFname,[par(i,:)',paramScaling]);
     end
 end
 % disp('here after writeDPSx');
@@ -45,7 +43,7 @@ runData.ssCurves{runGeneration} = cell(nPop,totalCases);
 runData.err{runGeneration} = zeros(nPop,totalCases);
 
 [curSimData,errors] = errorEvalWrap(cases,nPop,caseIDs,runFoldName,curSimData,info.cyclicFits,errors,info.fitStrat.ishift);
-% disp('here after error');
+disp('here after error');
 
 runData.mainSimData{runGeneration} = reshape(curSimData,[nPop,totalCases]);
 % runData.activitiesPH1{runGeneration} = reshape(activitiesPH1,[nPop,totalCases]);

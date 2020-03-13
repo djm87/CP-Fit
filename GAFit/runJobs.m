@@ -1,7 +1,7 @@
 function runJobs(isunix,slurmFlag,systemParams,nPop,totalCases,runFoldName,exeName)
 
 if (isunix && (slurmFlag == 1))
-    WriteCallParallelSlurm(systemParams);
+    WriteCallParallelSlurm(systemParams,nPop);
 %     disp('here after write parallel');
     [~,~] = system('sbatch --wait CallParallelSlurm.sh');
 %     disp('here after finished running parallel slurm');

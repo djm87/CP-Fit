@@ -1,14 +1,14 @@
-function WriteCallParallelSlurm(systemParams)
+function WriteCallParallelSlurm(systemParams,nPop)
 %writeCallParallelBat To get around the terrible parralel management in
 %windows, and poor parallel support in octave, a script is used to write each
 %case of concurrent runs and in the case of linux xargs is used in parallel
 %mode. %Support has also been added for slurm work jobs.
 cases = systemParams{1};
 info = systemParams{3};
-GAoptions = systemParams{4};
+% GAoptions = systemParams{4};
 runFoldName = systemParams{5};
 
-nPop = GAoptions.PopulationSize;
+% nPop = GAoptions.PopulationSize;
 nCase = length(cases.CaseIdentifier);
 ncores = info.sysInfo.parTasks;
 narrays = ceil(nPop*nCase/ncores);
