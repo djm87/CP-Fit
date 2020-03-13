@@ -34,7 +34,7 @@ GAoptions = readGAOptionsFile(GAFname);
 % Creating a folder for each population and each run-case, load files are
 % written at this time but parameter files will be written later when the
 % population is generated
-setupRunFolders(cases,GAoptions.PopulationSize,runSource,runFoldName,info.sysInfo.poolSize);
+setupRunFolders(cases,GAoptions.PopulationSize,runSource,runFoldName);
 
 %% Start optimization
 optimizationStart(cases,fitParam,info,GAoptions,runFoldName);

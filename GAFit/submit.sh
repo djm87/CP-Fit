@@ -12,6 +12,8 @@
 ##SBATCH --array=1-16%4
 #SBATCH -t 60-0:0:0
 #SBATCH --time-min=1:00:00
+#SBATCH --mail-user=zf1005@wildcats.unh.edu
+#SBATCH --mail-type=START,END
 #
 #SBATCH --mem=1G
 

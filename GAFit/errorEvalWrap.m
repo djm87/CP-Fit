@@ -4,8 +4,8 @@ FittingWeight = cases{1:end,'FittingWeight'};
 fitRange = [cases.Start,cases.End];
 
 outputFileName = cases.SimOut;
-colX = cases.ColumnX;
-colY = cases.ColumnY;
+colX = cases.Column_x;
+colY = cases.Column_y;
 dataFiles = cases.FilePath;
 iCyclic = cases.IsCyclic;
 iPF = cases.IsPF;
@@ -15,30 +15,39 @@ for j = 1:numel(caseIDs)
     expData = importdata(dataFiles{j});
     expX = expData(:,1);
     expY = expData(:,2);
-    xdiff = 0; % shift data to start at (0,0) if not
-    ydiff = 0;
-    for i = 1:nPop
+    curColX = colX(j);
+    curColY = colY(j);
+    curoutputFileName = outputFileName{j};
+    curicyclic = iCyclic(j);
+    curcyclicFits = cyclicFits{j};
+    curFittingWeight = FittingWeight(j);
+    curfitRange = fitRange(j,:);
+    curiPF = iPF(j);
+    
+    parfor i = 1:nPop
+        xdiff = 0; % shift data to start at (0,0) if not
+        ydiff = 0;
         % save the data
-        vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/',outputFileName{j}]);
-        vpscData = [vpscData.data(:,colX(j)),vpscData.data(:,colY(j))];
+        vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/',curoutputFileName]);
+        vpscData = [vpscData.data(:,curColX),vpscData.data(:,curColY)];
         curSimData{i} = vpscData;
         
         % Calculate error ------------------------------------------------
         simModx = vpscData(:,1);
         simMody = vpscData(:,2);
         
-        if (iCyclic(j) == 1)
+        if (curicyclic == 1)
             % If cyclic, split the case into N cases. For each case,
             % calculate an error and take the average on the given indices
-            errorstmp = zeros(size(cyclicFits{j},1),1);
-            totSampletmp = zeros(size(cyclicFits{j},1),1);
+            errorstmp = zeros(size(curcyclicFits,1),1);
+            totSampletmp = zeros(size(curcyclicFits,1),1);
             simDataInc = 1;
             iflip = 1;
             
-            for k = 1:size(cyclicFits{j},1)
+            for k = 1:size(curcyclicFits,1)
                 % Split experimental data
-                expX2 = expX(cyclicFits{j}(k,1):cyclicFits{j}(k,2));
-                expY2 = expY(cyclicFits{j}(k,1):cyclicFits{j}(k,2));
+                expX2 = expX(curcyclicFits(k,1):curcyclicFits(k,2));
+                expY2 = expY(curcyclicFits(k,1):curcyclicFits(k,2));
                 
                 expY2_smoothed = smooth(expX2,expY2,0.1);
                 
@@ -54,10 +63,10 @@ for j = 1:numel(caseIDs)
                 
                 % Find the section of the simulation data that matches
                 if (iflip == 1)
-                    [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,expX2,iflip);
+                    [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,simMody,expX2,expY2,iflip);
                     iflip = -1;
                 else
-                    [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,expX2,iflip);
+                    [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,simMody,expX2,expY2,iflip);
                     iflip = 1;
                 end
                 
@@ -74,18 +83,15 @@ for j = 1:numel(caseIDs)
                 else
                     [errorstmp(k),totSampletmp(k)] = calcError(expX2,expY2_smoothed,fitRange2,simModx2,simMody2);
                 end
-                if (~isreal(errorstmp(k)))
-                    save('currentBug.mat');
-                end
             end
             % errors are returned along with the number of samples (equal
             % to number of sampled data in experimental data. To calculate
             % average over all errors, the following mean is calculated:
             % error_i = sqrt( 1/N_i * sum( ln(sim/exp)^2 ) )
             % error = sum( error_i^2 * N_i / sum( N_i )
-            errors(i,j) = FittingWeight(j)*sqrt( sum(errorstmp.^2.*totSampletmp) / sum(totSampletmp) );
+            errors(i,j) = curFittingWeight*sqrt( sum(errorstmp.^2.*totSampletmp) / sum(totSampletmp) );
             
-        elseif (iPF(j) == 1)
+        elseif (curiPF == 1)
             % Add pole figure error calculation here
 %             if (info.fitStrat.ishift == 1)
 %                 [errors(i,j),totSampletmp(k)] = FittingWeight(j)*calcErrorShift(expX,expY,fitRange(j,:),simModx,simMody);
@@ -94,11 +100,11 @@ for j = 1:numel(caseIDs)
 %             end
         else
             if (ishift == 1)
-                [errors(i,j),~] = calcErrorShift(expX,expY,fitRange(j,:),simModx,simMody);
-                errors(i,j) = FittingWeight(j)*errors(i,j);
+                [errors(i,j),~] = calcErrorShift(expX,expY,curfitRange,simModx,simMody);
+                errors(i,j) = curFittingWeight*errors(i,j);
             else
-                [errors(i,j),~] = calcError(expX,expY,fitRange(j,:),simModx,simMody);
-                errors(i,j) = FittingWeight(j)*errors(i,j);
+                [errors(i,j),~] = calcError(expX,expY,curfitRange,simModx,simMody);
+                errors(i,j) = curFittingWeight*errors(i,j);
             end
         end
 %         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH1.OUT']);

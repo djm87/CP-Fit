@@ -3,6 +3,7 @@ startInd = 0;
 endInd = 0;
 % end point of each cycle should be approximately the same, find the
 % points in simulation data
+
 for i = simDataInc:length(simModx)
     if (iflip*simModx(i) > iflip*expX2(1) && startInd == 0 && simMody(i)/expY2(2) > 0)
         startInd = i;

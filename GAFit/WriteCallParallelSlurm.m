@@ -26,6 +26,7 @@ fprintf(fid,'#SBATCH --nodes=1\n');
 fprintf(fid,'#SBATCH --tasks-per-node=%1d\n',ncores);
 fprintf(fid,'#SBATCH --mem=%dG     # Memory \n',maxRam);
 fprintf(fid,'#SBATCH --time=%s                # Time limit hrs:min:sec\n',maxTime);
+fprintf(fid,'#SBATCH -o /dev/null  # suppress output log\n');
 fprintf(fid,'##SBATCH -o ./outputs/%s_%%A-%%a.out  # Standard output log\n',runName);
 fprintf(fid,'##SBATCH -e ./outputs/%s_%%A-%%a.err        # Standard error log\n',runName);
 fprintf(fid,'#SBATCH --array=0-%d%%%d           # Array range\n\n',narrays-1,nParJobs);
@@ -39,7 +40,7 @@ fprintf(fid,'  jname=$((${i} + 1))\n');
 fprintf(fid,'  for ((j=0; j<nCases; j++));do\n');
 fprintf(fid,'     linIndx=$((${i} * ${nCases} + ${j}))\n');
 fprintf(fid,'     cname=$((${j} + 1))\n');
-fprintf(fid,'     JobNames[${linIndx}]="cd %s/%s/$jname/$cname/ && ./%s"\n',pwd,runFoldName,exeFname);
+fprintf(fid,'     JobNames[${linIndx}]="%s/%s/$jname/$cname/"\n',pwd,runFoldName);
 fprintf(fid,'  done\n');
 fprintf(fid,'done\n\n');
 
