@@ -23,8 +23,9 @@ for j = 1:numel(caseIDs)
     curFittingWeight = FittingWeight(j);
     curfitRange = fitRange(j,:);
     curiPF = iPF(j);
-    
+%     disp(j);
     parfor i = 1:nPop
+%         disp(i);
         xdiff = 0; % shift data to start at (0,0) if not
         ydiff = 0;
         % save the data
@@ -69,19 +70,27 @@ for j = 1:numel(caseIDs)
                     [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,simMody,expX2,expY2,iflip);
                     iflip = 1;
                 end
-                
-                simModx2 = simModx(simTmpXInds(1):simTmpXInds(2));
-                simMody2 = simMody(simTmpXInds(1):simTmpXInds(2));
-                
-                fitRange2 = [expX2(1),expX2(end)];
-                
-%                 plot(expX2,expY2_smoothed,'b','LineWidth',2);
-%                 plot(simModx2,simMody2,'k','LineWidth',3);
-                
-                if (ishift == 1)
-                    [errorstmp(k),totSampletmp(k)] = calcErrorShift(expX2,expY2_smoothed,fitRange2,simModx2,simMody2);
+                if (simTmpXInds(1) > 0 && simTmpXInds(2) > simTmpXInds(1) && simTmpXInds(2) - simTmpXInds(1) > 10)
+                    simModx2 = simModx(simTmpXInds(1):simTmpXInds(2));
+                    simMody2 = simMody(simTmpXInds(1):simTmpXInds(2));
+
+                    fitRange2 = [expX2(1),expX2(end)];
+
+%                     plot(expX2,expY2_smoothed,'b','LineWidth',2);
+%                     plot(simModx2,simMody2,'k','LineWidth',3);
+
+                    if (ishift == 1)
+                        [errorstmp(k),totSampletmp(k)] = calcErrorShift(expX2,expY2_smoothed,fitRange2,simModx2,simMody2);
+                    else
+                        [errorstmp(k),totSampletmp(k)] = calcError(expX2,expY2_smoothed,fitRange2,simModx2,simMody2);
+                    end
+                    if (~isreal(errorstmp(k)))
+                        errorstmp(k) = 50;
+                        totSampletmp(k) = 1;
+                    end
                 else
-                    [errorstmp(k),totSampletmp(k)] = calcError(expX2,expY2_smoothed,fitRange2,simModx2,simMody2);
+                    errorstmp(k) = 100;
+                    totSampletmp(k) = 1;
                 end
             end
             % errors are returned along with the number of samples (equal
@@ -101,9 +110,15 @@ for j = 1:numel(caseIDs)
         else
             if (ishift == 1)
                 [errors(i,j),~] = calcErrorShift(expX,expY,curfitRange,simModx,simMody);
+                if (~isreal(errors(i,j)))
+                    errors(i,j) = 50;
+                end
                 errors(i,j) = curFittingWeight*errors(i,j);
             else
                 [errors(i,j),~] = calcError(expX,expY,curfitRange,simModx,simMody);
+                if (~isreal(errors(i,j)))
+                    errors(i,j) = 50;
+                end
                 errors(i,j) = curFittingWeight*errors(i,j);
             end
         end

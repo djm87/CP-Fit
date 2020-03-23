@@ -17,21 +17,27 @@ paramFname = info.modelInfo.paramFileName;
 Table = fitParam;
 nPop = size(par,1);
 totalCases = length(caseIDs);
-size(par)
+% size(par)
 %% Write sx files
 % write the sx files for each specific case then they will be copied into
 % each population run folder
 paramScaling = Table.scaling;
-parfor i = 1:nPop
-    for j = 1:numel(caseIDs)
-        % writes the parameter file nPop times for each case
-        writeDPSxFile([runFoldName,'/',num2str(i),'/',num2str(j),'/'],paramFname,[par(i,:)',paramScaling]);
+if (runGeneration > 2) % remove later
+    parfor i = 1:nPop
+        for j = 1:numel(caseIDs)
+    %         j
+    %         [runFoldName,'/',num2str(j),'/',num2str(i),'/']
+            % writes the parameter file(s) of all cases for each population
+            writeDPSxFile([runFoldName,'/',num2str(i),'/',num2str(j),'/'],paramFname,[par(i,:)',paramScaling]);
+        end
     end
 end
 % disp('here after writeDPSx');
 %% Write slurm batch scripts and execute the scripts
 % The batch script should run each executable in the RunningFolder
-runJobs(isunix,info.sysInfo.slurmFlag,systemParams,nPop,totalCases,runFoldName,info.sysInfo.exeName);
+if (runGeneration > 2) % remove later
+    runJobs(isunix,info.sysInfo.slurmFlag,systemParams,nPop,totalCases,runFoldName,info.sysInfo.exeName);
+end
 % disp('here after run jobs');
 %% Call errorEvalWrap that calls various functions to evaluate error for each objective
 curSimData = cell(nPop*totalCases,1);
@@ -43,7 +49,7 @@ runData.ssCurves{runGeneration} = cell(nPop,totalCases);
 runData.err{runGeneration} = zeros(nPop,totalCases);
 
 [curSimData,errors] = errorEvalWrap(cases,nPop,caseIDs,runFoldName,curSimData,info.cyclicFits,errors,info.fitStrat.ishift);
-disp('here after error');
+% disp('here after error');
 
 runData.mainSimData{runGeneration} = reshape(curSimData,[nPop,totalCases]);
 % runData.activitiesPH1{runGeneration} = reshape(activitiesPH1,[nPop,totalCases]);
