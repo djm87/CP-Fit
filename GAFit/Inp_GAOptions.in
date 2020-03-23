@@ -3,7 +3,7 @@
 gamultiobj
 *List of MATLAB GA options, '+' is parameter for the option, '>' is parameter for function handle
 FunctionTolerance
-+0.1
++0.001
 MaxGenerations
 +2
 MaxStallGenerations

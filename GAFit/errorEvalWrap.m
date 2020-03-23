@@ -109,7 +109,7 @@ for j = 1:numel(caseIDs)
 %             end
         else
             if (ishift == 1)
-                [errors(i,j),~] = calcErrorShift(expX,expY,curfitRange,simModx,simMody);
+                [errors(i,j),~] = calcErrorShift(expX,sexpY,curfitRange,simModx,simMody);
                 if (~isreal(errors(i,j)))
                     errors(i,j) = 50;
                 end

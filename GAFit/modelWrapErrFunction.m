@@ -22,7 +22,7 @@ totalCases = length(caseIDs);
 % write the sx files for each specific case then they will be copied into
 % each population run folder
 paramScaling = Table.scaling;
-if (runGeneration > 2) % remove later
+%if (runGeneration > 2) % remove later
     parfor i = 1:nPop
         for j = 1:numel(caseIDs)
     %         j
@@ -31,13 +31,13 @@ if (runGeneration > 2) % remove later
             writeDPSxFile([runFoldName,'/',num2str(i),'/',num2str(j),'/'],paramFname,[par(i,:)',paramScaling]);
         end
     end
-end
+%end
 % disp('here after writeDPSx');
 %% Write slurm batch scripts and execute the scripts
 % The batch script should run each executable in the RunningFolder
-if (runGeneration > 2) % remove later
+%if (runGeneration > 2) % remove later
     runJobs(isunix,info.sysInfo.slurmFlag,systemParams,nPop,totalCases,runFoldName,info.sysInfo.exeName);
-end
+%end
 % disp('here after run jobs');
 %% Call errorEvalWrap that calls various functions to evaluate error for each objective
 curSimData = cell(nPop*totalCases,1);
