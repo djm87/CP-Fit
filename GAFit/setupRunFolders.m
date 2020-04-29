@@ -1,4 +1,6 @@
 function setupRunFolders(cases,populationSize,runSource,runFoldName)
+% Function will create the folder that contains the simulation files to be
+% run in each generation.
 
 if (exist(runFoldName,'dir') ~= 7)
     mkdir(runFoldName);

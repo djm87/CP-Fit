@@ -1,19 +1,12 @@
-function optimizationStart(cases,fitParam,info,GAoptions,runFoldName)
-% Read in fitting parameters for DD law
-Table = fitParam;
-% Determine the fitting recipe
-toRefine = find(Table.fitFlag == true);
-
-systemParams = {cases;fitParam;info;GAoptions;runFoldName};
+function optimizationStart(cases,fitParam,fitRecipe,info,GAoptions,runFoldName,PFFits,expData)
+systemParams = {cases;fitParam;fitRecipe;info;GAoptions;runFoldName;PFFits;expData};
 
 %% Global Variables
 global runData;
 runData.params = cell(GAoptions.MaxGenerations,1); % number of generations
-runData.mainSimData = cell(GAoptions.MaxGenerations,1); % number of generations
-% runData.activitiesPH1 = cell(GAoptions.MaxGenerations,1); % number of generations
-% runData.activitiesPH2 = cell(GAoptions.MaxGenerations,1); % number of generations
-% runData.activitiesPH3 = cell(GAoptions.MaxGenerations,1); % number of generations
-runData.err = cell(GAoptions.MaxGenerations,1); % number of generations
+runData.lowestErrSimData = cell(GAoptions.MaxGenerations,1);
+runData.shiftinds = cell(GAoptions.MaxGenerations,1);
+runData.err = cell(GAoptions.MaxGenerations,1);
 global runGeneration;
 runGeneration = 0;
 
@@ -21,8 +14,8 @@ runGeneration = 0;
 if (info.GAinp.iSingleRunGA == 0)
     fun = @modelWrapErrFunction;
     
-    lb = Table{toRefine,{'lowerBound'}};
-    ub = Table{toRefine,{'upperBound'}};     
+    lb = fitParam{fitRecipe,{'lowerBound'}};
+    ub = fitParam{fitRecipe,{'upperBound'}};     
     nVars = length(ub);
     A = info.GAinp.A;
     b = info.GAinp.b;
@@ -61,37 +54,48 @@ if (info.GAinp.iSingleRunGA == 0)
 else
     fname4 = 'oneRunAllVars.mat';
     fname5 = 'oneRunRunData.mat';
-    errTotal = modelWrapErrFunction(Table{toRefine,{'Parameters'}}',systemParams);
+    errTotal = modelWrapErrFunction(fitParam{fitRecipe,{'Parameters'}}',systemParams);
     save(fname4,'-regexp', '^(?!(runData)$).');
     save(fname5,'runData');
 end
 
 %% Make plot of the model of the lowest error in the last generation
-plotGen = runGeneration;
-[~,plotPop] = min(sum(runData.err{plotGen,1},2));
+[~,plotPop] = min(sum(runData.err{runGeneration,1},2));
 
-Table{toRefine,{'Parameters'}}=runData.params{plotGen,1}(plotPop,:)';
-Table{toRefine,{'lowerBound'}}=lb;
-Table{toRefine,{'upperBound'}}=ub;
-Table{1:end,{'fitFlag'}}=0;
-Table{toRefine,{'fitFlag'}}=1;
-writetable(Table,fname3);
+fitParam{fitRecipe,{'Parameters'}}=runData.params{runGeneration,1}(plotPop,:)';
+writetable(fitParam,fname3);
 
 caseDataFiles = cases{1:end,'FilePath'};
-if (info.fitStrat.iplot == 2)
+if (info.fitStrat.iplot == 1)
+    figure;
+    shift = runData.shiftinds{runGeneration};
+    shiftAmt = linspace(info.fitStrat.ishift(2),info.fitStrat.ishift(3),info.fitStrat.ishift(4));
     for i = 1:numel(caseDataFiles)
         exp = importdata(caseDataFiles{i});
-        sim = runData.mainSimData{plotGen}{plotPop,i};
+        sim = runData.lowestErrSimData{runGeneration}{1,i};
+        
+        subplot(ceil(length(caseDataFiles)/3),3,cases.PlotFigure(i));
+        
+        hold on;
+        plot(exp(:,1),exp(:,2),'r','LineWidth',2);
+        plot(sim(:,1)+shiftAmt(shift(i)),sim(:,2),'b--','LineWidth',2);
+        xlim([-0.2 0]);
+        xlabel('True strain');
+        ylabel('True stress (MPa)');
+    end
+elseif (info.fitStrat.iplot == 2)
+    for i = 1:numel(caseDataFiles)
+        exp = importdata(caseDataFiles{i});
+        sim = runData.lowestErrSimData{runGeneration}{1,i};
 %         ActPH1=runData.activitiesPH1{plotGen}{plotPop,i};
 %         ActPH2=runData.activitiesPH2{plotGen}{plotPop,i};
 %         ActPH3=runData.activitiesPH3{plotGen}{plotPop,i};
-        
         figure(cases.PlotFigure(i));
-        subplot(1,2,1);
         hold on;
-        plot(exp(:,1),exp(:,2),'--');
-        plot(sim(:,1),exp(:,2));
-        
+        plot(exp(:,1),exp(:,2),'r--','LineWidth',2);
+        plot(sim(:,1),sim(:,2),'b-','LineWidth',2);
+        xlabel('True strain');
+        ylabel('True stress (MPa)');
 %         strain=ActPH1(:,1);
 %         phaseFrac=ActPH1(:,2);
 %         subplot(1,2,2);

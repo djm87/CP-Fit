@@ -12,7 +12,7 @@ elseif (slurmFlag == 2)
     for i = 1:nPop
         for j = 1:totalCases
             jobList{jobCount} = [runFoldName,'/',num2str(i),'/',num2str(j)];
-            jobCommand{jobCount} = ['cd /d ',jobList{i},' && ',exeName];
+            jobCommand{jobCount} = ['cd /d ',jobList{jobCount},' && ',exeName];
             jobCount = jobCount + 1;
         end
     end

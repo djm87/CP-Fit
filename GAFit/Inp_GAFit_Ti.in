@@ -1,0 +1,14 @@
+*File containing a table that lists the experimental cases to be fit
+./InputFiles/Ti/Inp_WhatToFit_Ti.csv
+*File containing a table that lists the parameters to be fit
+./InputFiles/Ti/Inp_FittingParams_Ti.csv
+*File containing recipe for fitting
+./InputFiles/Ti/Inp_Fit_recipes_Ti.in
+*File containing information on operating system, fitting strategy, and genetic algorithm inputs
+./InputFiles/Ti/Inp_Info_Ti.in
+*File containing all the genetic algorithm options the user wishes to use
+./InputFiles/Ti/Inp_GAOptions_Ti.in
+*Folder containing the files necessary for running each case. Load file and material file will be written separately
+VPSCSource
+*Folder to store all the run-time jobs
+RunningFolder

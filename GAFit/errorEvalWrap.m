@@ -1,20 +1,26 @@
-function [curSimData,errors] = errorEvalWrap(cases,nPop,caseIDs,runFoldName,curSimData,cyclicFits,errors,ishift)
+function [curSimData,errors,shiftind] = errorEvalWrap(cases,nPop,caseIDs,runFoldName,...
+    curSimData,errors,shiftind,PFFits,expData,cyclicFits,ishift)
+% A wrapper that interacts with various functions to calculate errors for
+% cyclic, regular stress-strain, and pole figure data
 
 FittingWeight = cases{1:end,'FittingWeight'};
 fitRange = [cases.Start,cases.End];
 
 outputFileName = cases.SimOut;
+PFFileName = cases.PFFileName;
 colX = cases.Column_x;
 colY = cases.Column_y;
 dataFiles = cases.FilePath;
 iCyclic = cases.IsCyclic;
-iPF = cases.IsPF;
-
+slope_err1 = zeros(nPop);
+slope_err2 = zeros(nPop);
 for j = 1:numel(caseIDs)
-    % Determine the case
-    expData = importdata(dataFiles{j});
-    expX = expData(:,1);
-    expY = expData(:,2);
+    % Determine the case, regular cases are stress-strain curves, extended
+    % cases are pole figures etc.
+    expData.smoothedY = cell(length(dataFiles),1);
+    expFcn = expData.expYFcn{j};
+    expX = expData.X{j};
+    expY = expData.smoothedY{j};
     curColX = colX(j);
     curColY = colY(j);
     curoutputFileName = outputFileName{j};
@@ -22,21 +28,21 @@ for j = 1:numel(caseIDs)
     curcyclicFits = cyclicFits{j};
     curFittingWeight = FittingWeight(j);
     curfitRange = fitRange(j,:);
-    curiPF = iPF(j);
-%     disp(j);
+    
     parfor i = 1:nPop
-%         disp(i);
+
         xdiff = 0; % shift data to start at (0,0) if not
         ydiff = 0;
         % save the data
         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/',curoutputFileName]);
         vpscData = [vpscData.data(:,curColX),vpscData.data(:,curColY)];
-        curSimData{i} = vpscData;
-        
+        curSimData{i,j} = vpscData;
+%         vpscData = runData.lowestErrSimData{17,1}{j};
         % Calculate error ------------------------------------------------
         simModx = vpscData(:,1);
         simMody = vpscData(:,2);
-        
+
+        % cyclic error evaluation
         if (curicyclic == 1)
             % If cyclic, split the case into N cases. For each case,
             % calculate an error and take the average on the given indices
@@ -44,14 +50,14 @@ for j = 1:numel(caseIDs)
             totSampletmp = zeros(size(curcyclicFits,1),1);
             simDataInc = 1;
             iflip = 1;
-            
+
             for k = 1:size(curcyclicFits,1)
                 % Split experimental data
                 expX2 = expX(curcyclicFits(k,1):curcyclicFits(k,2));
                 expY2 = expY(curcyclicFits(k,1):curcyclicFits(k,2));
-                
-                expY2_smoothed = smooth(expX2,expY2,0.1);
-                
+
+                expY2_smoothed = expY2;%smooth(expX2,expY2,0.005);
+
                 if (k == 1)
                     xdiff = expX2(1);
                     ydiff = expY2_smoothed(1);
@@ -61,7 +67,7 @@ for j = 1:numel(caseIDs)
                     expX2 = expX2 - xdiff;
                     expY2_smoothed = expY2_smoothed - ydiff;
                 end
-                
+
                 % Find the section of the simulation data that matches
                 if (iflip == 1)
                     [simDataInc,simTmpXInds] = findCyclicStartEnd(simDataInc,simModx,simMody,expX2,expY2,iflip);
@@ -76,11 +82,8 @@ for j = 1:numel(caseIDs)
 
                     fitRange2 = [expX2(1),expX2(end)];
 
-%                     plot(expX2,expY2_smoothed,'b','LineWidth',2);
-%                     plot(simModx2,simMody2,'k','LineWidth',3);
-
-                    if (ishift == 1)
-                        [errorstmp(k),totSampletmp(k)] = calcErrorShift(expX2,expY2_smoothed,fitRange2,simModx2,simMody2);
+                    if (ishift(1) == 1)
+                        [errorstmp(k),totSampletmp(k),~] = calcErrorShift(expX2,expY2_smoothed,fitRange2,simModx2,simMody2,ishift);
                     else
                         [errorstmp(k),totSampletmp(k)] = calcError(expX2,expY2_smoothed,fitRange2,simModx2,simMody2);
                     end
@@ -99,39 +102,121 @@ for j = 1:numel(caseIDs)
             % error_i = sqrt( 1/N_i * sum( ln(sim/exp)^2 ) )
             % error = sum( error_i^2 * N_i / sum( N_i )
             errors(i,j) = curFittingWeight*sqrt( sum(errorstmp.^2.*totSampletmp) / sum(totSampletmp) );
-            
-        elseif (curiPF == 1)
-            % Add pole figure error calculation here
-%             if (info.fitStrat.ishift == 1)
-%                 [errors(i,j),totSampletmp(k)] = FittingWeight(j)*calcErrorShift(expX,expY,fitRange(j,:),simModx,simMody);
-%             else
-%                 [errors(i,j),totSampletmp(k)] = FittingWeight(j)*calcError(expX,expY,fitRange(j,:),simModx,simMody);
-%             end
+
+        % non-cyclic stress-strain error evaluation
         else
-            if (ishift == 1)
-                [errors(i,j),~] = calcErrorShift(expX,sexpY,curfitRange,simModx,simMody);
+            if (ishift(1) == 1)
+                [errors(i,j),~,shiftind(i,j)] = calcErrorShift(expX,expFcn,curfitRange,simModx,simMody,ishift);
                 if (~isreal(errors(i,j)))
                     errors(i,j) = 50;
                 end
                 errors(i,j) = curFittingWeight*errors(i,j);
             else
-                [errors(i,j),~] = calcError(expX,expY,curfitRange,simModx,simMody);
+                [errors(i,j),~] = calcError(expX,expFcn,curfitRange,simModx,simMody);
                 if (~isreal(errors(i,j)))
                     errors(i,j) = 50;
                 end
                 errors(i,j) = curFittingWeight*errors(i,j);
             end
+        end % end of cyclic check
+        ind1 = 0;
+        ind2 = 0;
+        if (j == 5)
+            y2 = -469.19;
+            y1 = -191.22;
+            x2 = -0.20029;
+            x1 = -0.012984;
+            expslope = (y2 - y1)/(x2 - x1);
+            % find the location in the simulation
+            for k = 1:length(simModx)
+                if (simModx(k) <= -0.13)
+                    if (simModx(k) <= -0.2)
+                        ind2 = k;
+                        break;
+                    end
+                    if (ind1 == 0)
+                        ind1 = k;
+                    end
+                end
+            end
+            simslope = (simMody(ind2) - simMody(ind1))/(simModx(ind2) - simModx(ind1));
+            slope_err1(i) = sqrt((log(abs(simslope/expslope))).^2);
         end
-%         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH1.OUT']);
-%         vpscData = vpscData.data;
-%         activitiesPH1{i} = vpscData;
-%         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH2.OUT']);
-%         vpscData = vpscData.data;
-%         activitiesPH2{i} = vpscData;
-%         vpscData = importdata([runFoldName,'/',num2str(i),'/',num2str(j),'/ACT_PH3.OUT']);
-%         vpscData = vpscData.data;
-%         activitiesPH3{i} = vpscData;
+        if (j == 8)
+            y2 = -415.81;
+            y1 = -145.74;
+            x2 = -0.2;
+            x1 = -0.012905;
+            expslope = (y2 - y1)/(x2 - x1);
+            % find the location in the simulation
+            for k = 1:length(simModx)
+                if (simModx(k) <= -0.13)
+                    if (simModx(k) <= -0.2)
+                        ind2 = k;
+                        break;
+                    end
+                    if (ind1 == 0)
+                        ind1 = k;
+                    end
+                end
+            end
+            simslope = (simMody(ind2) - simMody(ind1))/(simModx(ind2) - simModx(ind1));
+            slope_err2(i) = sqrt((log(abs(simslope/expslope))).^2);
+        end
+    end % end of parfor loop
+end % end of case loop
+errors2 = zeros(nPop,numel(caseIDs)+2);
+for i = 1:nPop
+    errortmp = [errors(i,:),slope_err1(i),slope_err2(i)];
+    errors2(i,:) = errortmp;
+end
+errors = errors2;
+    
+iPF = cases.IsPF;
+
+% evaluating texture error
+if (any(iPF >= 1))
+    iPFInd = find(iPF >= 1);
+    texError = cell(nPop,numel(iPFInd));
+    PFRange = cases.PFRange;
+    totalPF = sum(cases{1:end,'IsPF'});
+    for j = 1:numel(iPFInd)
+        caseInd = iPFInd(j); % index of the corresponding case
+        expF = PFFits.deformedF{j};
+        curMaxDiff = PFFits.maxDiff(j);
+        curPFFileName = PFFileName{j};
+        curPFRange = str2num(PFRange{j});
+        parfor i = 1:nPop
+            % pole figure error evaluation
+            texError{i,j} = zeros(1,length(curPFRange)-1);
+            % fetch the simulation texture
+            simTexture = [runFoldName,'/',num2str(i),'/',num2str(caseInd),'/',curPFFileName];
+            % the first texture is also the texture at end of simulation
+            if (curPFRange(2) == 100)
+                [euler,weights] = loadVPSC(simTexture,100);
+                FMeanTarget = calcMeanF(euler*pi/180,weights);
+                
+                diff = sqrt(sum((FMeanTarget-expF{1}).^2));
+                texError{i,j}(1) = diff/curMaxDiff;
+            else
+                for k = 2:length(curPFRange)
+                    [euler,weights] = loadVPSC(simTexture,curPFRange(k));
+                    FMeanTarget = calcMeanF(euler*pi/180,weights);
+                    diff = sqrt(sum((FMeanTarget-expF{k-1}).^2));
+                    texError{i,j}(k-1) = diff/curMaxDiff;
+                end
+            end
+        end
     end
+    errors2 = zeros(nPop,size(errors,2)+totalPF);
+    for i = 1:nPop
+        errortmp = errors(i,:);
+        for j = 1:numel(iPFInd)
+            errortmp = [errortmp,texError{i,j}];
+        end
+        errors2(i,:) = errortmp;
+    end
+    errors = errors2;
 end
 
 end

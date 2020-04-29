@@ -1,0 +1,11 @@
+CaseNo,FilePath,CaseIdentifier,SimOut,Column_x,Column_y,Start,End,Dataset,DatasetIdentifier,PlotFigure,IsCyclic,IsPF,PFRange,PFFileName,FittingWeight,description
+1,FittingDataFiles/Ti_brad_C1.SS,Ti_brad_C1,STR_STR.OUT,3,9,0,-2.00E-01,1,Ti_brad,1,0,0,0 100,TEX_PH1.OUT,1,Brad 17.1 C1
+2,FittingDataFiles/Ti_brad_C2.SS,Ti_brad_C2,STR_STR.OUT,4,10,0,-2.00E-01,1,Ti_brad,2,0,0,0 100,TEX_PH1.OUT,1,Brad 17.1 C2
+3,FittingDataFiles/Ti_brad_C3.SS,Ti_brad_C3,STR_STR.OUT,5,11,0,-2.00E-01,1,Ti_brad,3,0,0,0 100,TEX_PH1.OUT,1,Brad 17.1 C3
+4,FittingDataFiles/Ti_brad_PSC.SS,Ti_brad_PSC,STR_STR.OUT,5,11,0,-2.00E-01,1,Ti_brad,4,0,0,0 100,TEX_PH1.OUT,1,Brad 17.1 PSC
+5,FittingDataFiles/Ti_625_C1.SS,Ti_625_C1,STR_STR.OUT,3,9,0,-2.00E-01,2,Ti_625,5,0,0,0 0.05 0.2,TEX_PH1.OUT,1,625 case C1
+6,FittingDataFiles/Ti_625_C2.SS,Ti_625_C2,STR_STR.OUT,4,10,0,-2.00E-01,2,Ti_625,6,0,0,0 0.05 0.2,TEX_PH1.OUT,1,625 case C2
+7,FittingDataFiles/Ti_625_C3.SS,Ti_625_C3,STR_STR.OUT,5,11,0,-2.00E-01,2,Ti_625,7,0,0,0 0.05 0.2,TEX_PH1.OUT,1,625 case C3
+8,FittingDataFiles/Ti_800_C1.SS,Ti_800_C1,STR_STR.OUT,3,9,0,-2.00E-01,3,Ti_800,8,0,0,0 0.05 0.2,TEX_PH1.OUT,1,800 case C1
+9,FittingDataFiles/Ti_800_C2.SS,Ti_800_C2,STR_STR.OUT,4,10,0,-2.00E-01,3,Ti_800,9,0,0,0 0.05 0.2,TEX_PH1.OUT,1,800 case C2
+10,FittingDataFiles/Ti_800_C3.SS,Ti_800_C3,STR_STR.OUT,5,11,0,-2.00E-01,3,Ti_800,10,0,0,0 0.05 0.2,TEX_PH1.OUT,1,800 case C3

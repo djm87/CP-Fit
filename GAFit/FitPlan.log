@@ -1,0 +1,4 @@
+tau0 hp k1 - 0.1
+k1 TT/CTtau0 TT/CTHP g lats - 0.2
+k1 TT/CTtau0 TT/CTHP g drag lats - 0.5
+ - 0.6

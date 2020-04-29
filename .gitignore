@@ -1,1 +1,4 @@
-/GAFit/RunningFolder/
+./GAFit/RunningFolder/
+./Outputs/.
+./GAFit/profile_results/
+./Debug/

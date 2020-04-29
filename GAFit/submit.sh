@@ -4,9 +4,9 @@
 #SBATCH --nodes=1
 #SBATCH --tasks-per-node=4
 ##SBATCH --cpus-per-task=1
-#SBATCH --partition=thrust2
+#SBATCH --partition=general
 #SBATCH -s
-#
+#SBATCH --mem=300G     # Memory
 #SBATCH -o ./headlessOut/%A_%a.out
 #SBATCH -e ./headlessOut/%A_%a.err
 ##SBATCH --array=1-16%4
@@ -14,8 +14,6 @@
 #SBATCH --time-min=1:00:00
 #SBATCH --mail-user=zf1005@wildcats.unh.edu
 #SBATCH --mail-type=START,END
-#
-#SBATCH --mem=1G
 
 #echo "My SLURM_ARRAY_TASK_ID: " $SLURM_ARRAY_TASK_ID
 

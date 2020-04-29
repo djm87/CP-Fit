@@ -4,9 +4,9 @@ function WriteCallParallelSlurm(systemParams,nPop)
 %case of concurrent runs and in the case of linux xargs is used in parallel
 %mode. %Support has also been added for slurm work jobs.
 cases = systemParams{1};
-info = systemParams{3};
-% GAoptions = systemParams{4};
-runFoldName = systemParams{5};
+info = systemParams{4};
+% GAoptions = systemParams{5};
+runFoldName = systemParams{6};
 
 % nPop = GAoptions.PopulationSize;
 nCase = length(cases.CaseIdentifier);
