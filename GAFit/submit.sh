@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH --tasks-per-node=4
 ##SBATCH --cpus-per-task=1
-#SBATCH --partition=general
+#SBATCH --partition=thrust2
 #SBATCH -s
 #SBATCH --mem=300G     # Memory
 #SBATCH -o ./headlessOut/%A_%a.out

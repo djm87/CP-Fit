@@ -1,6 +1,7 @@
 function [err,totN] = calcError(expX,expFcn,fitRange,simModx,simMody)
 % Calculates error for stress-strain curve or stress-strain curve sections
-
+% totN = 1;
+% err = sqrt(sum((log(simMody(1)/expFcn(simModx(1)))).^2)/totN);
 if (fitRange(1) < fitRange(2))
     % limiting fitting region to a region with valid simulation and experiment
     % data

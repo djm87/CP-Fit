@@ -55,8 +55,6 @@ else
     fname4 = 'oneRunAllVars.mat';
     fname5 = 'oneRunRunData.mat';
     errTotal = modelWrapErrFunction(fitParam{fitRecipe,{'Parameters'}}',systemParams);
-    save(fname4,'-regexp', '^(?!(runData)$).');
-    save(fname5,'runData');
 end
 
 %% Make plot of the model of the lowest error in the last generation
@@ -71,7 +69,7 @@ if (info.fitStrat.iplot == 1)
     shift = runData.shiftinds{runGeneration};
     shiftAmt = linspace(info.fitStrat.ishift(2),info.fitStrat.ishift(3),info.fitStrat.ishift(4));
     for i = 1:numel(caseDataFiles)
-        exp = importdata(caseDataFiles{i});
+        exp = importVPSCout(caseDataFiles{i},0);
         sim = runData.lowestErrSimData{runGeneration}{1,i};
         
         subplot(ceil(length(caseDataFiles)/3),3,cases.PlotFigure(i));
@@ -85,7 +83,7 @@ if (info.fitStrat.iplot == 1)
     end
 elseif (info.fitStrat.iplot == 2)
     for i = 1:numel(caseDataFiles)
-        exp = importdata(caseDataFiles{i});
+        exp = importVPSCout(caseDataFiles{i},0);
         sim = runData.lowestErrSimData{runGeneration}{1,i};
 %         ActPH1=runData.activitiesPH1{plotGen}{plotPop,i};
 %         ActPH2=runData.activitiesPH2{plotGen}{plotPop,i};

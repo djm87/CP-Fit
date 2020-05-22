@@ -1,6 +1,6 @@
 **Fitting Strategies
 *Shifting, 0 - no shifting, non-zero - specifies the amount of shifting, third value - specifies number of shifting increments
-1 -0.01 0.01 5
+1 -0.01 0 9
 *Saving data
 1
 *Plot final fit, 0 - no plotting, 1 - plot in 1 figure, 2 - plot separately
@@ -10,10 +10,14 @@
 2
 *Run one time for testing flag, 1 - run GA once, 0 - perform the whole run
 0
+*Number of constraints
+2
 *A
- 
+1 0 -1 0 0 0 0 0 0 0 0
+1 0 0 0 -1 0 0 0 0 0 0
 *b
- 
+0
+0
 *Aeq
  
 *beq
@@ -24,9 +28,10 @@
 0 0
 **Model Information
 *Number of parameter files
-1
+2
 *Parameter file name
 Titanium.sx
+vpsc7.in
 **System Information
 *Program executable name
 vpsc7.exe

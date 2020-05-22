@@ -3,18 +3,19 @@ function expData = prepData(cases)
 expData = [];
 
 dataFiles = cases.FilePath;
-
-expData.X = cell(length(dataFiles),1);
-expData.smoothedY = cell(length(dataFiles),1);
-expData.expYFcn = cell(length(dataFiles),1);
-for j = 1:length(dataFiles)
-    importedExp = importdata(dataFiles{j});
-    expData.X{j} = importedExp(:,1);
+X = cell(length(dataFiles),1);
+smoothedY = cell(length(dataFiles),1);
+expYFcn = cell(length(dataFiles),1);
+parfor j = 1:length(dataFiles)
+    importedExp = importVPSCout(dataFiles{j},0);
+    X{j} = importedExp(:,1);
     expY = importedExp(:,2);
-    expData.smoothedY{j} = smooth(expData.X{j},expY,0.005);
+    smoothedY{j} = smooth(X{j},expY,0.005);
     
-    [fitX, fitY] = prepareCurveData(expData.X{j},expData.smoothedY{j});
-    [expData.expYFcn{j}, ~] = fit(fitX,fitY,'smoothingspline');
+    [fitX, fitY] = prepareCurveData(X{j},smoothedY{j});
+    [expYFcn{j}, ~] = fit(fitX,fitY,'smoothingspline');
 end
-
+expData.X = X;
+expData.smoothedY = smoothedY;
+expData.expYFcn = expYFcn;
 end

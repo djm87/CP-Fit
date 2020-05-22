@@ -8,9 +8,9 @@ G = par(5); % shear modulus
 
 % Prismatic parameters
 T0_pri = par(6);
-T0_pri_K = par(7);
-T0_pri_K_TT = par(8);
-T0_pri_K_CT = par(9);
+T0_pri_HP = par(7);
+T0_pri_HP_TT = par(8);
+T0_pri_HP_CT = par(9);
 k1_pri = par(10);
 g_pri = par(11);
 drag_pri = par(12);
@@ -21,9 +21,9 @@ edot_0_pri = par(16);
 
 % Pyramidal <c+a> parameters 
 T0_pyr = par(17);
-T0_pyr_K = par(18);
-T0_pyr_K_TT = par(19);
-T0_pyr_K_CT = par(20);
+T0_pyr_HP = par(18);
+T0_pyr_HP_TT = par(19);
+T0_pyr_HP_CT = par(20);
 k1_pyr = par(21);
 g_pyr = par(22);
 drag_pyr = par(23);
@@ -34,30 +34,41 @@ edot_0_pyr = par(27);
 
 % Basal parameters 
 T0_bas = par(28);
-T0_bas_K = par(29);
-k1_bas = par(30);
-g_bas = par(31);
-drag_bas = par(32);
-lat_TT_bas = par(33);
-lat_CT_bas = par(34);
-rho_bas = par(35);
-edot_0_bas = par(36);
+T0_bas_HP = par(29);
+T0_bas_HP_TT = par(30);
+T0_bas_HP_CT = par(31);
+k1_bas = par(32);
+g_bas = par(33);
+drag_bas = par(34);
+lat_TT_bas = par(35);
+lat_CT_bas = par(36);
+rho_bas = par(37);
+edot_0_bas = par(38);
 
 % Twin TT1
-T0_TT_nuc = par(37);
-T0_TT_prop = par(38);
-T0_TT_K = par(39);
-thres1_TT = par(40);
-thres2_TT = par(41);
-secfrac_TT = par(42);
+T0_TT_nuc = par(39);
+T0_TT_prop = par(40);
+T0_TT_HP = par(41);
+thres1_TT = par(42);
+thres2_TT = par(43);
+secfrac_TT = par(44);
 
 % Twin CT1
-T0_CT_nuc = par(43);
-T0_CT_prop = par(44);
-T0_CT_K = par(45);
-thres1_CT = par(46);
-thres2_CT = par(47);
-secfrac_CT = par(48);
+T0_CT_nuc = par(45);
+T0_CT_prop = par(46);
+T0_CT_HP = par(47);
+thres1_CT = par(48);
+thres2_CT = par(49);
+secfrac_CT = par(50);
+
+% vpsc7.in parameters
+if (dataSet == 1)
+    freq = 0;
+elseif (dataSet > 1)
+    freq = 50;
+end
+% Neff
+Neff = par(51);
 
 fileID=fopen([fpath,paramFname{1}],'w');
 fprintf(fileID,'*Material: Titanium\n');
@@ -176,7 +187,7 @@ fprintf(fileID,'  %9.7g 1.E-01                    !INITIAL RHO_S (1/m^2), INITIA
 fprintf(fileID,' 0  %7.5g  0.   1.0   0.  0. 0.  0.0  0.0	  !ISL (law for slip),A,B,C,D,E,... SLIP CONSTANTS (set for no temperature dependence)\n',T0_pri);
 fprintf(fileID,' 2   %9.7g  %9.7g                 !TLATENT HARDENING BY THIS SLIP MODE ON TWIN1, TWIN2:  C IN EQ. (3.28)\n',lat_TT_pri,lat_CT_pri);
 fprintf(fileID,' 0.  0.                            !TLATENT1 HARDENING BY THIS SLIP MODE ON TWIN1, TWIN2\n');
-fprintf(fileID,' %7.5g  %7.5g %7.5g                     !FOR HPFAC COEF FOR THIS SLIP MODE FOR GRAIN BOUNDARY, TWIN1 BOUNDARY, TWIN2 BOUNDARY\n',T0_pri_K,T0_pri_K_TT,T0_pri_K_CT);
+fprintf(fileID,' %7.5g  %7.5g %7.5g                     !FOR HPFAC COEF FOR THIS SLIP MODE FOR GRAIN BOUNDARY, TWIN1 BOUNDARY, TWIN2 BOUNDARY\n',T0_pri_HP,T0_pri_HP_TT,T0_pri_HP_CT);
 fprintf(fileID,' 2 8.0 0. 1.                       !IQ (LAW FOR Q), Q0,Q1,Q2 FOR LAW FOR Q, Q2 just needs to be non-zero\n');
 fprintf(fileID,' 2 0.0 0.0 0.0 %9.7g            !ISHMOD (law for shear modulus),SHEAR MODULUS CONSTANTS\n',G);
 fprintf(fileID,'PYRAMIDAL<c+a>\n');
@@ -187,7 +198,7 @@ fprintf(fileID,' %9.7g 1.E-01                    !INITIAL RHO_S (1/m^2), INITIAL
 fprintf(fileID,' 0  %7.5g 0.  1.  0.  0. 	0. 0.0 0.0   !ISL (law for slip),A,B,C,D,E,... SLIP CONSTANTS\n',T0_pyr);
 fprintf(fileID,' 2  %9.7g    %9.7g                   !TLATENT HARDENING BY THIS SLIP MODE ON TWIN1, TWIN2:  C IN EQ. (3.28)\n',lat_TT_pyr,lat_CT_pyr);
 fprintf(fileID,' 0.  0.         				   !TLATENT1 HARDENING BY THIS SLIP MODE ON TWIN1, TWIN2\n');
-fprintf(fileID,' %7.5g   %7.5g   %7.5g   	               !FOR HPFAC COEF FOR THIS SLIP MODE FOR GRAIN BOUNDARY, TWIN1 BOUNDARY, TWIN2 BOUNDARY\n',T0_pyr_K,T0_pyr_K_TT,T0_pyr_K_CT);
+fprintf(fileID,' %7.5g   %7.5g   %7.5g   	               !FOR HPFAC COEF FOR THIS SLIP MODE FOR GRAIN BOUNDARY, TWIN1 BOUNDARY, TWIN2 BOUNDARY\n',T0_pyr_HP,T0_pyr_HP_TT,T0_pyr_HP_CT);
 fprintf(fileID,' 2 5.0  0.0 1.0                    !IQ (LAW FOR Q), Q0,Q1,Q2 FOR LAW FOR Q\n');
 fprintf(fileID,' 2 0.0 0.0 0.0 %9.7g            !ISHMOD (law for shear modulus),SHEAR MODULUS CONSTANTS\n',G);
 fprintf(fileID,'BASAL\n');
@@ -198,7 +209,7 @@ fprintf(fileID,'  %9.7g 1.E-01                   !INITIAL RHO_S (1/m^2), INITIAL
 fprintf(fileID,' 0  %7.5g   0.0   1.0   0.  0.0  0.0 0.0 0.0   !ISL (law for slip),A,B,C,D,E,... SLIP CONSTANTS\n',T0_bas);
 fprintf(fileID,' 2  %9.7g      %9.7g                     !TLATENT HARDENING BY THIS SLIP MODE ON TWIN1, TWIN2:  C IN EQ. (3.28)\n',lat_TT_bas,lat_CT_bas);
 fprintf(fileID,' 0.   0.                           !TLATENT1 HARDENING BY THIS SLIP MODE ON TWIN1, TWIN2\n');
-fprintf(fileID,' %7.5g   %7.5g   %7.5g                     !FOR HPFAC COEF FOR THIS SLIP MODE FOR GRAIN BOUNDARY, TWIN1 BOUNDARY, TWIN2 BOUNDARY\n',T0_bas_K,T0_bas_K_TT,T0_bas_K_CT);
+fprintf(fileID,' %7.5g   %7.5g   %7.5g                     !FOR HPFAC COEF FOR THIS SLIP MODE FOR GRAIN BOUNDARY, TWIN1 BOUNDARY, TWIN2 BOUNDARY\n',T0_bas_HP,T0_bas_HP_TT,T0_bas_HP_CT);
 fprintf(fileID,' 2 8.0 0. 1.                     !IQ (LAW FOR Q), Q0,Q1,Q2 FOR LAW FOR Q\n');
 fprintf(fileID,' 2 0.0 0.0 0.0 %9.7g            !ISHMOD (law for shear modulus),SHEAR MODULUS CONSTANTS\n',G);
 fprintf(fileID,'TWIN1=TENSILE TWINNING\n');
@@ -206,13 +217,13 @@ fprintf(fileID,' 3.0174e-011                       !TWIN BURGERS VECTOR (m)\n');
 fprintf(fileID,' 1 1\n');
 fprintf(fileID,' %7.5g 0.0 10.0\n',T0_TT_nuc);
 fprintf(fileID,' %7.5g 0.0 10.0\n',T0_TT_prop);
-fprintf(fileID,' %7.5g                             !HP used in hallpetch term same as just first on in\n',T0_TT_K);
+fprintf(fileID,' %7.5g                             !HP used in hallpetch term same as just first on in\n',T0_TT_HP);
 fprintf(fileID,'TWIN3=COMPRESSIVE TWINNING\n');
 fprintf(fileID,' 2.725e-011                        !TWIN BURGERS VECTOR (m)\n');
 fprintf(fileID,' 1 1\n');
 fprintf(fileID,' %7.5g 0.0 10.0               !B,V,A,mi,sigma\n',T0_CT_nuc);
 fprintf(fileID,' %7.5g 0.0 10.0               !B,V,A,mi,sigma\n',T0_CT_prop);
-fprintf(fileID,' %7.5g                             !HP  used in hallpetch term\n',T0_CT_K);
+fprintf(fileID,' %7.5g                             !HP  used in hallpetch term\n',T0_CT_HP);
 fprintf(fileID,'INTERACTION MATRIX\n');
 fprintf(fileID,' 0.9 0.0 0.0\n');
 fprintf(fileID,' 0.0 0.9 0.0\n');
@@ -252,4 +263,69 @@ fprintf(fileID,'-------------------\n');
 fprintf(fileID,'WORK TO HEAT\n');
 fprintf(fileID,'16640.0 0.1455e3 0.09544e-1 -68.9e3 0.0 !density[kg/m^3],A0,A1,A2,(C=A0+A1*T+A2/T**2)[J/kg/K],worktoheat\n');
 fclose(fileID);
+
+fileID=fopen([fpath,paramFname{2}],'w');
+fprintf(fileID,'1                          number of elements (nelem)\n');
+fprintf(fileID,'3                          number of phases (nph)\n');
+fprintf(fileID,'1.0  0.0  0.0                 relative vol. fract. of phases (wph(i))\n');
+fprintf(fileID,'*INFORMATION ABOUT PHASE #1\n');
+fprintf(fileID,'0                             grain shape and orient ctrl (ishape=0 to 4)\n');
+fprintf(fileID,'0    20                       ifrag   crit_shp\n');
+fprintf(fileID,'%4.2e  %4.2e  %4.2e     initial ellipsoid ratios (dummy if ishape=4)\n',T0_d,T0_d,T0_d);
+fprintf(fileID,'0.0  0.0  0.0                 init Eul ang ellips axes (dummy if ishape=3,4)\n');
+fprintf(fileID,'* name and path of texture file (filetext)\n');
+fprintf(fileID,'Ti.TEX\n');
+fprintf(fileID,'* name and path of single crystal file (filecrys)\n');
+fprintf(fileID,'Titanium.sx\n');
+fprintf(fileID,'* name and path of grain shape file (dummy if ishape=0) (fileaxes)\n');
+fprintf(fileID,'RAND1000.TEX\n');
+fprintf(fileID,'*INFORMATION ABOUT PHASE #2\n');
+fprintf(fileID,'0                             grain shape and orient ctrl (ishape=0 to 4)\n');
+fprintf(fileID,'0    20                       ifrag   crit_shp\n');
+fprintf(fileID,'%4.2e  %4.2e  %4.2e     initial ellipsoid ratios (dummy if ishape=4)\n',T0_d,T0_d,T0_d);
+fprintf(fileID,'0.0  0.0  0.0                 init Eul ang ellips axes (dummy if ishape=3,4)\n');
+fprintf(fileID,'* name and path of texture file (filetext)\n');
+fprintf(fileID,'Ti.TEX\n');
+fprintf(fileID,'* name and path of single crystal file (filecrys)\n');
+fprintf(fileID,'Titanium.sx\n');
+fprintf(fileID,'* name and path of grain shape file (dummy if ishape=0) (fileaxes)\n');
+fprintf(fileID,'RAND1000.TEX\n');
+fprintf(fileID,'*INFORMATION ABOUT PHASE #3\n');
+fprintf(fileID,'0                             grain shape and orient ctrl (ishape=0 to 4)\n');
+fprintf(fileID,'0    20                       ifrag   crit_shp\n');
+fprintf(fileID,'%4.2e  %4.2e  %4.2e     initial ellipsoid ratios (dummy if ishape=4)\n',T0_d,T0_d,T0_d);
+fprintf(fileID,'0.0  0.0  0.0                 init Eul ang ellips axes (dummy if ishape=3,4)\n');
+fprintf(fileID,'* name and path of texture file (filetext)\n');
+fprintf(fileID,'Ti.TEX\n');
+fprintf(fileID,'* name and path of single crystal file (filecrys)\n');
+fprintf(fileID,'Titanium.sx\n');
+fprintf(fileID,'* name and path of grain shape file (dummy if ishape=0) (fileaxes)\n');
+fprintf(fileID,'RAND1000.TEX\n');
+fprintf(fileID,'*PRECISION SETTINGS FOR CONVERGENCE PROCEDURES (default values)\n');
+fprintf(fileID,'0.001 0.001 0.001 0.001    errs,errd,errm,errso\n');
+fprintf(fileID,'200  30  85    itmax:  max # of iter, external, internal and SO loops\n');
+fprintf(fileID,'0  2 10 2   irsvar & xrsini,xrsfin,xrstep (dummy if irsvar=0)\n');
+fprintf(fileID,'1              ibcinv (0: don''t use <Bc>**-1, 1: use <Bc>**-1 in SC eq)\n');
+fprintf(fileID,'*INPUT/OUTPUT SETTINGS FOR THE RUN (default is zero)\n');
+fprintf(fileID,'0              irecover:read grain states from POSTMORT.IN (1) or not (0)?\n');
+fprintf(fileID,'0              isave:   write grain states in POSTMORT.OUT at step ''isave''?\n');
+fprintf(fileID,'0              icubcomp:calculate fcc rolling components?\n');
+fprintf(fileID,'%3i             nwrite (frequency of texture downloads)\n',freq);
+fprintf(fileID,'*MODELING CONDITIONS FOR THE RUN\n');
+fprintf(fileID,'2              ihardlaw (explicit: [0:Voce, 1:MTS, 2:CG, 3:cut&rev, 4:saturation type], implicit: [10:CG, 11:saturation type])\n');
+fprintf(fileID,'0              iratesens (0:rate insensitive, 1:rate sensitive)\n');
+fprintf(fileID,'3              interaction (0:FC,1:affine,2:secant,3:neff=Neff_INP,4:tangent,5:SO;)\n');
+fprintf(fileID,'%2.1f            Neff_INP\n',Neff);
+fprintf(fileID,'1  1  1        iupdate: update orient, grain shape, hardening\n');
+fprintf(fileID,'0              nneigh (0 for no neighbors, 1 for pairs, etc.)\n');
+fprintf(fileID,'0              iflu (0: don''t calc, 1: calc fluctuations)\n');
+fprintf(fileID,'0  7           i_rid (k-mod method,0:off,1:on), x_n (k in the k-method)\n');
+fprintf(fileID,'0 0 0 0        (all with implicit hard): ixmctgimpl(simplified (0) or fully implicit (1) xmctg),iDDupdopt(explicit (0) or implicit (1) DD update),inumj(numerical xmtg: 1 or 0),inumxmctg(numerical xmctg: 1 or 0)\n');
+fprintf(fileID,'*NUMBER OF PROCESSES (COMBINATION OF UNIFORM OR VARIABLE LOAD,PCYS,LANKFORD)\n');
+fprintf(fileID,'1\n');
+fprintf(fileID,'*IVGVAR AND PATH, NAME OF FILE FOR EACH PROCESS (dummy if ivgvar=2,3)\n');
+fprintf(fileID,'0\n');
+fprintf(fileID,'load.pro\n');
+fclose(fileID);
+
 end

@@ -40,7 +40,8 @@ expData = prepData(cases);
 
 % Set up pole figure calibration
 PFFits = readPF(cases);
-
+%%
+% PFFits = [];
 % Set up the run-time environment
 % Creating a folder for each population and each run-case, load files are
 % written at this time but parameter files will be written later when the

@@ -8,7 +8,7 @@ shiftErr = zeros(N,1);
 totalN = zeros(N,1);
 shiftX = linspace(lb,ub,N); 
 
-for shift = 1:N
+parfor shift = 1:N
     shiftAmount = shiftX(shift);
     tempx = simModx + shiftAmount;
     

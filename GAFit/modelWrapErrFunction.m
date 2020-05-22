@@ -19,8 +19,7 @@ caseIDs = cases{1:end,'CaseIdentifier'};
 paramFname = info.modelInfo.paramFileName;
 nPop = size(par,1);
 totalCases = length(caseIDs);
-totalPF = sum(cases{1:end,'IsPF'});
-totalObjectives = totalCases + totalPF;
+totalObjectives = sum(cases.Objectives);
 
 %% Write sx files
 % write the sx files for each specific case then they will be copied into
@@ -43,12 +42,11 @@ end
 runJobs(isunix,info.sysInfo.slurmFlag,systemParams,nPop,totalCases,runFoldName,info.sysInfo.exeName);
 
 %% Call errorEvalWrap that calls various functions to evaluate error for each objective
-curSimData = cell(nPop,totalCases);
-errors = zeros(nPop,totalCases);
-shiftind = zeros(nPop,totalCases);
-runData.err{runGeneration} = zeros(nPop,totalObjectives);
+curSimData = cell(nPop,totalObjectives);
+errors = zeros(nPop,totalObjectives);
+shiftind = zeros(nPop,totalObjectives);
 
-[curSimData,errors,shiftind] = errorEvalWrap(cases,nPop,caseIDs,runFoldName,curSimData,errors,shiftind,PFFits,expData,info.cyclicFits,info.fitStrat.ishift);
+[curSimData,errors,shiftind] = errorEvalWrap(cases,nPop,runFoldName,curSimData,errors,shiftind,PFFits,expData,info.cyclicFits,info.fitStrat.ishift);
 
 runData.err{runGeneration} = errors;
 [~,lowestErr] = min(sum(runData.err{runGeneration,1},2));

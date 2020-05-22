@@ -47,7 +47,7 @@ RAND1000.TEX
 *MODELING CONDITIONS FOR THE RUN
 2              ihardlaw (explicit: [0:Voce, 1:MTS, 2:CG, 3:cut&rev, 4:saturation type], implicit: [10:CG, 11:saturation type])
 0              iratesens (0:rate insensitive, 1:rate sensitive)
-3              interaction (0:FC,1:affine,2:secant,3:neff=10,4:tangent,5:SO)
+2              interaction (0:FC,1:affine,2:secant,3:neff=10,4:tangent,5:SO)
 1  1  1        iupdate: update orient, grain shape, hardening
 0              nneigh (0 for no neighbors, 1 for pairs, etc.)
 0              iflu (0: don't calc, 1: calc fluctuations)

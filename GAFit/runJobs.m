@@ -2,9 +2,8 @@ function runJobs(isunix,slurmFlag,systemParams,nPop,totalCases,runFoldName,exeNa
 
 if (isunix && (slurmFlag == 1))
     WriteCallParallelSlurm(systemParams,nPop);
-%     disp('here after write parallel');
     [~,~] = system('sbatch --wait CallParallelSlurm.sh');
-%     disp('here after finished running parallel slurm');
+    
 elseif (slurmFlag == 2)
     jobList = cell(nPop*totalCases,1);
     jobCommand = cell(nPop*totalCases,1);
@@ -18,7 +17,10 @@ elseif (slurmFlag == 2)
     end
     
     parfor i = 1:length(jobList)
-        [~,~] = system(jobCommand{i});
+        s = dir([jobList{i},'/STR_STR.OUT']);
+        if (isempty(s) || s.bytes < 20000)
+            [~,~] = system(jobCommand{i});
+        end
     end
 elseif (slurmFlag == 3)
     jobList = cell(nPop*totalCases,1);
