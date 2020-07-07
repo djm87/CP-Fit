@@ -1,4 +1,4 @@
-cd 'E:\3 Ti\Outputs\1 Ti Outputs\2 Set2\3 Neff Fitting 2 points shift reduced ranges'
+cd 'E:\3 Ti\Outputs\1 Ti Outputs\3 Set3'
 %%
 cd 'E:\3 Ti\CP-Fit\GAFit'
 caseIDs = cases{1:end,'CaseIdentifier'};
@@ -21,30 +21,50 @@ shift = runData.shiftinds{runGeneration};
 shiftAmt = linspace(info.fitStrat.ishift(2),info.fitStrat.ishift(3),info.fitStrat.ishift(4));
 for i = 1:numel(caseDataFiles)
     expData2 = importVPSCout(caseDataFiles{i},0);
-    sim = runData.lowestErrSimData{runGeneration}{1,i};%importVPSCout(['E:\3 Ti\Outputs\1 Ti Outputs\2 Set2\brad_625_800 10 cases recipe 2 from try 2\265\',num2str(i),'\STR_STR.OUT'],1);
+    simSS = runData.lowestErrSimData{runGeneration}{1,i};%importVPSCout(['E:\3 Ti\Outputs\1 Ti Outputs\2 Set2\brad_625_800 10 cases recipe 2 from try 2\265\',num2str(i),'\STR_STR.OUT'],1);
     
     subplot(ceil(length(caseDataFiles)/3),3,cases.PlotFigure(i));
     
     hold on;
     plot(expData2(:,1),expData2(:,2),'r','LineWidth',2);
-    plot(sim(:,1),sim(:,2),'b--','LineWidth',2);%+shiftAmt(shift(i))
-    xlim([-0.4 0]);
+    plot(simSS(:,1),simSS(:,2),'b--','LineWidth',2);%+shiftAmt(shift(i))
+%     xlim([-0.4 0]);
     xlabel('True strain');
     ylabel('True stress (MPa)');
 end
 
 figure;
 for i = 1:numel(caseDataFiles)
-    sim = runData.lowestErrVFData{runGeneration}{1,i};%importVPSCout(['E:\3 Ti\Outputs\1 Ti Outputs\2 Set2\3 Neff Fitting 2 points shift reduced ranges\11 results like 8 but with different ranges and fitting texture\193\',num2str(i),'\ACT_PH1.OUT'],1);
+    simVF1 = runData.lowestErrVFData{runGeneration}{1,i};%importVPSCout(['E:\3 Ti\Outputs\1 Ti Outputs\2 Set2\3 Neff Fitting 2 points shift reduced ranges\11 results like 8 but with different ranges and fitting texture\193\',num2str(i),'\ACT_PH1.OUT'],1);
     
     subplot(ceil(length(caseDataFiles)/3),3,cases.PlotFigure(i));
     
     hold on;
-    plot(sim(:,1),sim(:,2),'k','LineWidth',2);
-    plot(sim(:,1),sim(:,3),'k-.','LineWidth',2);
-    plot(sim(:,1),sim(:,4),'k--','LineWidth',2);
-    plot(sim(:,1),sim(:,5),'b--','LineWidth',2);
-    plot(sim(:,1),sim(:,6),'r','LineWidth',2);
+    plot(simVF1(:,1),simVF1(:,2),'k','LineWidth',2);
+    plot(simVF1(:,1),simVF1(:,3),'k-.','LineWidth',2);
+    plot(simVF1(:,1),simVF1(:,4),'k--','LineWidth',2);
+    plot(simVF1(:,1),simVF1(:,5),'b--','LineWidth',2);
+    plot(simVF1(:,1),simVF1(:,6),'r','LineWidth',2);
+%     xlim([-0.2 0]);
+    xlabel('True strain');
+    ylabel('Activities and VF');
+    box off;
+end
+legend('Pri','Pyr','Bas','TT','CT','Location','EastOutside');
+legend('box','off');
+
+figure;
+for i = 1:numel(caseDataFiles)
+    simVF2 = runData.lowestErrVFData2{runGeneration}{1,i};%importVPSCout(['E:\3 Ti\Outputs\1 Ti Outputs\2 Set2\3 Neff Fitting 2 points shift reduced ranges\11 results like 8 but with different ranges and fitting texture\193\',num2str(i),'\ACT_PH1.OUT'],1);
+    
+    subplot(ceil(length(caseDataFiles)/3),3,cases.PlotFigure(i));
+    
+    hold on;
+    plot(simVF2(:,1),simVF2(:,2),'k','LineWidth',2);
+    plot(simVF2(:,1),simVF2(:,3),'k-.','LineWidth',2);
+    plot(simVF2(:,1),simVF2(:,4),'k--','LineWidth',2);
+    plot(simVF2(:,1),simVF2(:,5),'b--','LineWidth',2);
+    plot(simVF2(:,1),simVF2(:,6),'r','LineWidth',2);
 %     xlim([-0.2 0]);
     xlabel('True strain');
     ylabel('Activities and VF');
@@ -61,15 +81,15 @@ VFExp = {[3.08,54.96,1.2;0.07,1.03,5.14],...
     [1.07,10.71,0.05,9.93;9.98,33.46,0.02,3.74]};
 figure;
 for i = 1:numel(caseDataFiles)
-    sim = runData.lowestErrVFData{runGeneration}{1,i};%importVPSCout(['E:\3 Ti\Outputs\1 Ti Outputs\2 Set2\3 Neff Fitting 2 points shift reduced ranges\11 results like 8 but with different ranges and fitting texture\193\',num2str(i),'\ACT_PH1.OUT'],1);
-    sim2 = runData.lowestErrVFData2{runGeneration}{1,i};%importVPSCout(['E:\3 Ti\Outputs\1 Ti Outputs\2 Set2\3 Neff Fitting 2 points shift reduced ranges\11 results like 8 but with different ranges and fitting texture\193\',num2str(i),'\ACT_PH1.OUT'],1);
+    simVF1 = runData.lowestErrVFData{runGeneration}{1,i};%importVPSCout(['E:\3 Ti\Outputs\1 Ti Outputs\2 Set2\3 Neff Fitting 2 points shift reduced ranges\11 results like 8 but with different ranges and fitting texture\193\',num2str(i),'\ACT_PH1.OUT'],1);
+    simVF2 = runData.lowestErrVFData2{runGeneration}{1,i};%importVPSCout(['E:\3 Ti\Outputs\1 Ti Outputs\2 Set2\3 Neff Fitting 2 points shift reduced ranges\11 results like 8 but with different ranges and fitting texture\193\',num2str(i),'\ACT_PH1.OUT'],1);
     subplot(ceil(length(caseDataFiles)/3),3,cases.PlotFigure(i));
     
     hold on;
-    plot(sim(:,1),sim(:,5),'k','LineWidth',2);
-    plot(sim(:,1),sim(:,6),'b','LineWidth',2);
-    plot(sim2(:,1),sim2(:,2),'r','LineWidth',2);
-    plot(sim2(:,1),sim2(:,3),'m','LineWidth',2);
+    plot(simVF1(:,1),simVF1(:,5),'k','LineWidth',2);
+    plot(simVF1(:,1),simVF1(:,6),'b','LineWidth',2);
+    plot(simVF2(:,1),simVF2(:,5),'r','LineWidth',2);
+    plot(simVF2(:,1),simVF2(:,6),'m','LineWidth',2);
     if (i >= 5 && i < 9)
         plot(0.05,VFExp{i-4}(1,1)/100,'kO');
         plot(0.2,VFExp{i-4}(1,2)/100,'kO');
